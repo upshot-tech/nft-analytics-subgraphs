@@ -1,0 +1,20 @@
+{
+  "name": "nft-analytics-subgraphs",
+  "version": "0.1.0",
+  "description": "NFT Analytics Subgraphs",
+  "license": "MIT",
+  "scripts": {
+    "build": "graph build",
+    "auth": "graph auth",
+    "codegen": "graph codegen --output-dir types/",
+    "deploy:axie-infinity": "yarn --cwd subgraphs/axie-infinity deploy",
+    "deploy:cryptokitties": "yarn --cwd subgraphs/cryptokitties deploy",
+    "deploy:cryptopunks": "yarn --cwd subgraphs/cryptopunks deploy",
+    "deploy:known-origin": "yarn --cwd subgraphs/known-origin deploy",
+    "deploy:superrare": "yarn --cwd subgraphs/superrare deploy"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.19.0",
+    "@graphprotocol/graph-ts": "^0.19.0"
+  }
+}

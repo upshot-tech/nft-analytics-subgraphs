@@ -1,0 +1,13 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "_nftAddress", "type": "address" },
+      { "indexed": true, "name": "_tokenId", "type": "uint256" },
+      { "indexed": false, "name": "_totalPrice", "type": "uint256" },
+      { "indexed": false, "name": "_winner", "type": "address" }
+    ],
+    "name": "AuctionSuccessful",
+    "type": "event"
+  }
+]

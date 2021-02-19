@@ -1,0 +1,57 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraph for Axie Infinity
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: Axie_Infinity_ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Axie_Infinity_ERC721
+      address: "0xF5b0A3eFB8e8E4c201e2A935F110eAaF3FFEcb8d"
+      startBlock: 5251724
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Axie_Infinity_ERC721
+          file: ./abis/Axie_Infinity_ERC721.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - TransferEvent
+      eventHandlers:
+        - event: AxieSpawned(indexed uint256,indexed address,uint256)
+          handler: handleMint
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+  - name: Axie_Infinity_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Axie_Infinity_Market
+      address: "0xf4985070ce32b6b1994329df787d1acc9a2dd9e2"
+      startBlock: 5316433
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Axie_Infinity_ERC721
+          file: ./abis/Axie_Infinity_ERC721.json
+        - name: Axie_Infinity_Market
+          file: ./abis/Axie_Infinity_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: AuctionSuccessful(indexed address,indexed uint256,uint256,address)
+          handler: handleSold

@@ -1,0 +1,199 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraphs
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: Axie_Infinity_ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Axie_Infinity_ERC721
+      address: "0xF5b0A3eFB8e8E4c201e2A935F110eAaF3FFEcb8d"
+      startBlock: 5251724
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/axie-infinity/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Axie_Infinity_ERC721
+          file: ./subgraphs/axie-infinity/abis/Axie_Infinity_ERC721.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - TransferEvent
+      eventHandlers:
+        - event: AxieSpawned(indexed uint256,indexed address,uint256)
+          handler: handleMint
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+  - name: Axie_Infinity_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Axie_Infinity_Market
+      address: "0xf4985070ce32b6b1994329df787d1acc9a2dd9e2"
+      startBlock: 5316433
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/axie-infinity/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Axie_Infinity_ERC721
+          file: ./subgraphs/axie-infinity/abis/Axie_Infinity_ERC721.json
+        - name: Axie_Infinity_Market
+          file: ./subgraphs/axie-infinity/abis/Axie_Infinity_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: AuctionSuccessful(indexed address,indexed uint256,uint256,address)
+          handler: handleSold
+
+  - name: CryptoKitties_ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CryptoKitties_ERC721
+      address: "0x06012c8cf97BEaD5deAe237070F9587f8E7A266d"
+      startBlock: 4605167
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/cryptokitties/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: CryptoKitties_ERC721
+          file: ./subgraphs/cryptokitties/abis/CryptoKitties_ERC721.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - TransferEvent
+      eventHandlers:
+        - event: Birth(address,uint256,uint256,uint256,uint256)
+          handler: handleMint
+        - event: Transfer(address,address,uint256)
+          handler: handleTransfer
+
+  - name: CryptoKitties_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CryptoKitties_Market
+      address: "0xb1690c08e213a35ed9bab7b318de14420fb57d8c"
+      startBlock: 4605169
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/cryptokitties/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: CryptoKitties_ERC721
+          file: ./subgraphs/cryptokitties/abis/CryptoKitties_ERC721.json
+        - name: CryptoKitties_Market
+          file: ./subgraphs/cryptokitties/abis/CryptoKitties_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: AuctionSuccessful(uint256,uint256,address)
+          handler: handleSold
+
+  - name: CryptoPunks_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CryptoPunks_Market
+      address: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB"
+      startBlock: 3914495
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/cryptopunks/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: CryptoPunks_Market
+          file: ./subgraphs/cryptopunks/abis/CryptoPunks_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - AskEvent
+        - BidEvent
+        - SaleEvent
+        - TransferEvent
+      eventHandlers:
+        - event: Assign(indexed address,uint256)
+          handler: handleMint
+        - event: PunkBought(indexed uint256,uint256,indexed address,indexed address)
+          handler: handleSold
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+  - name: Known_Origin_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Known_Origin_Market
+      address: "0xfbeef911dc5821886e1dda71586d90ed28174b7d"
+      startBlock: 6270484
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/known-origin/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Known_Origin_Market
+          file: ./subgraphs/known-origin/abis/Known_Origin_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: Minted(indexed uint256,indexed uint256,indexed address)
+          handler: handleMint
+        - event: Purchase(indexed uint256,indexed uint256,indexed address,uint256)
+          handler: handleSold
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+
+  - name: SuperRare_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SuperRare_Market
+      address: "0x41a322b28d0ff354040e2cbc676f0320d8c8850d"
+      startBlock: 5364090
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/superrare/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: SuperRare_Market
+          file: ./subgraphs/superrare/abis/SuperRare_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      callHandlers:
+        - function: addNewToken(string)
+          handler: handleAddNewToken
+        - function: addNewTokenWithEditions(string,uint256,uint256)
+          handler: handleAddNewTokenWithEditions
+      eventHandlers:
+        - event: Sold(indexed address,indexed address,uint256,indexed uint256)
+          handler: handleSold
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer

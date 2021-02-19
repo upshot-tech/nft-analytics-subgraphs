@@ -1,0 +1,57 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraph for CryptoKitties
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: CryptoKitties_ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CryptoKitties_ERC721
+      address: "0x06012c8cf97BEaD5deAe237070F9587f8E7A266d"
+      startBlock: 4605167
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: CryptoKitties_ERC721
+          file: ./abis/CryptoKitties_ERC721.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - TransferEvent
+      eventHandlers:
+        - event: Birth(address,uint256,uint256,uint256,uint256)
+          handler: handleMint
+        - event: Transfer(address,address,uint256)
+          handler: handleTransfer
+
+  - name: CryptoKitties_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CryptoKitties_Market
+      address: "0xb1690c08e213a35ed9bab7b318de14420fb57d8c"
+      startBlock: 4605169
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: CryptoKitties_ERC721
+          file: ./abis/CryptoKitties_ERC721.json
+        - name: CryptoKitties_Market
+          file: ./abis/CryptoKitties_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: AuctionSuccessful(uint256,uint256,address)
+          handler: handleSold

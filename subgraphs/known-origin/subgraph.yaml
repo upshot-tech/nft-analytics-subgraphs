@@ -1,0 +1,33 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraph for Known Origin
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: Known_Origin_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Known_Origin_Market
+      address: "0xfbeef911dc5821886e1dda71586d90ed28174b7d"
+      startBlock: 6270484
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Known_Origin_Market
+          file: ./abis/Known_Origin_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: Minted(indexed uint256,indexed uint256,indexed address)
+          handler: handleMint
+        - event: Purchase(indexed uint256,indexed uint256,indexed address,uint256)
+          handler: handleSold
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

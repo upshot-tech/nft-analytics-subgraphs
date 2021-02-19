@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Node dependencies
+node_modules/
+
+# Build
+build/
+types/

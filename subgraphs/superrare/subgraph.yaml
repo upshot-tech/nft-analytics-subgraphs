@@ -1,0 +1,36 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraph for SuperRare
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: SuperRare_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SuperRare_Market
+      address: "0x41a322b28d0ff354040e2cbc676f0320d8c8850d"
+      startBlock: 5364090
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: .//mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: SuperRare_Market
+          file: ./abis/SuperRare_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      callHandlers:
+        - function: addNewToken(string)
+          handler: handleAddNewToken
+        - function: addNewTokenWithEditions(string,uint256,uint256)
+          handler: handleAddNewTokenWithEditions
+      eventHandlers:
+        - event: Sold(indexed address,indexed address,uint256,indexed uint256)
+          handler: handleSold
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
