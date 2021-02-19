@@ -1,7 +1,7 @@
 import { Address } from "@graphprotocol/graph-ts";
 
 /* Axie Infinity constants */
-export let BASE_TOKEN_URI = "https://marketplace.axieinfinity.com/axie/";
+export let BASE_TOKEN_URI = "https://axieinfinity.com/api/v2/axies/";
 export let CONTRACT_URI = "https://axieinfinity.com/";
 export let CONTRACT_NAME = "Axie Infinity";
 export let CONTRACT_SYMBOL = "AXIE";
