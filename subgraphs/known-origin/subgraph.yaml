@@ -9,7 +9,7 @@ dataSources:
     network: mainnet
     source:
       abi: Known_Origin_Market
-      address: "0xfbeef911dc5821886e1dda71586d90ed28174b7d"
+      address: "0xFBeef911Dc5821886e1dda71586d90eD28174B7d"
       startBlock: 6270484
     mapping:
       kind: ethereum/events

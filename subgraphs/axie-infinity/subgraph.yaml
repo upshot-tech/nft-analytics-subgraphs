@@ -35,7 +35,7 @@ dataSources:
     network: mainnet
     source:
       abi: Axie_Infinity_Market
-      address: "0xf4985070ce32b6b1994329df787d1acc9a2dd9e2"
+      address: "0xF4985070Ce32b6B1994329DF787D1aCc9a2dd9e2"
       startBlock: 5316433
     mapping:
       kind: ethereum/events

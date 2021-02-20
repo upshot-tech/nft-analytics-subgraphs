@@ -1,5 +1,6 @@
 import { Address } from "@graphprotocol/graph-ts";
 
+/* CryptoKitties constants */
 export let BASE_TOKEN_URI = "https://www.cryptokitties.co/kitty/";
 export let CONTRACT_URI = "https://www.cryptokitties.co/";
 export let CONTRACT_NAME = "CryptoKitties";

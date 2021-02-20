@@ -35,7 +35,7 @@ dataSources:
     network: mainnet
     source:
       abi: CryptoKitties_Market
-      address: "0xb1690c08e213a35ed9bab7b318de14420fb57d8c"
+      address: "0xb1690C08E213a35Ed9bAb7B318DE14420FB57d8C"
       startBlock: 4605169
     mapping:
       kind: ethereum/events

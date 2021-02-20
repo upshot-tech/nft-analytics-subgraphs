@@ -5,5 +5,5 @@ export let CONTRACT_NAME = "SuperRare";
 export let CONTRACT_SYMBOL = "SUPR";
 export let CONTRACT_METADATA = "{}";
 export let CONTRACT_ADDRESS = Address.fromString(
-  "0x41a322b28d0ff354040e2cbc676f0320d8c8850d"
+  "0x41A322b28D0fF354040e2CbC676F0320d8c8850d"
 );

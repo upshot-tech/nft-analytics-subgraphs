@@ -35,7 +35,7 @@ dataSources:
     network: mainnet
     source:
       abi: Axie_Infinity_Market
-      address: "0xf4985070ce32b6b1994329df787d1acc9a2dd9e2"
+      address: "0xF4985070Ce32b6B1994329DF787D1aCc9a2dd9e2"
       startBlock: 5316433
     mapping:
       kind: ethereum/events
@@ -87,7 +87,7 @@ dataSources:
     network: mainnet
     source:
       abi: CryptoKitties_Market
-      address: "0xb1690c08e213a35ed9bab7b318de14420fb57d8c"
+      address: "0xb1690C08E213a35Ed9bAb7B318DE14420FB57d8C"
       startBlock: 4605169
     mapping:
       kind: ethereum/events
@@ -144,7 +144,7 @@ dataSources:
     network: mainnet
     source:
       abi: Known_Origin_Market
-      address: "0xfbeef911dc5821886e1dda71586d90ed28174b7d"
+      address: "0xFBeef911Dc5821886e1dda71586d90eD28174B7d"
       startBlock: 6270484
     mapping:
       kind: ethereum/events
@@ -172,7 +172,7 @@ dataSources:
     network: mainnet
     source:
       abi: SuperRare_Market
-      address: "0x41a322b28d0ff354040e2cbc676f0320d8c8850d"
+      address: "0x41A322b28D0fF354040e2CbC676F0320d8c8850d"
       startBlock: 5364090
     mapping:
       kind: ethereum/events
@@ -196,4 +196,29 @@ dataSources:
         - event: Sold(indexed address,indexed address,uint256,indexed uint256)
           handler: handleSold
         - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+  - name: SuperRare_V2
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SuperRare_V2
+      address: "0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0"
+      startBlock: 8486734
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/superrare/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: SuperRare_V2
+          file: ./subgraphs/superrare/abis/SuperRare_V2.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+      eventHandlers:
+        - event: TokenURIUpdated(indexed uint256,string)
+          handler: handleUpdateTokenURI
+        - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

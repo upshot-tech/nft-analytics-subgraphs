@@ -9,7 +9,7 @@ dataSources:
     network: mainnet
     source:
       abi: SuperRare_Market
-      address: "0x41a322b28d0ff354040e2cbc676f0320d8c8850d"
+      address: "0x41A322b28D0fF354040e2CbC676F0320d8c8850d"
       startBlock: 5364090
     mapping:
       kind: ethereum/events

@@ -1,5 +1,6 @@
 import { Address, TypedMap } from "@graphprotocol/graph-ts";
 
+/* CryptoPunks constants */
 export let BASE_TOKEN_URI = "https://www.larvalabs.com/cryptopunks/details/";
 export let CONTRACT_URI = "https://www.larvalabs.com/cryptopunks";
 export let CONTRACT_NAME = "CryptoPunks";
