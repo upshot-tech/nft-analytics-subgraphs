@@ -159,11 +159,12 @@ dataSources:
         - Contract
         - NFT
         - SaleEvent
+      callHandlers:
+        - function: purchase(uint256)
+          handler: handleSold
       eventHandlers:
         - event: Minted(indexed uint256,indexed uint256,indexed address)
           handler: handleMint
-        - event: Purchase(indexed uint256,indexed uint256,indexed address,uint256)
-          handler: handleSold
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
 
@@ -197,28 +198,27 @@ dataSources:
           handler: handleSold
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-
-  - name: SuperRare_V2
-    kind: ethereum/contract
-    network: mainnet
-    source:
-      abi: SuperRare_V2
-      address: "0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0"
-      startBlock: 8486734
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      file: ./subgraphs/superrare/mapping.ts
-      language: wasm/assemblyscript
-      abis:
-        - name: SuperRare_V2
-          file: ./subgraphs/superrare/abis/SuperRare_V2.json
-      entities:
-        - Account
-        - Contract
-        - NFT
-      eventHandlers:
-        - event: TokenURIUpdated(indexed uint256,string)
-          handler: handleUpdateTokenURI
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
+  # - name: SuperRare_V2
+  #   kind: ethereum/contract
+  #   network: mainnet
+  #   source:
+  #     abi: SuperRare_V2
+  #     address: "0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0"
+  #     startBlock: 8486734
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     file: ./subgraphs/superrare/mapping.ts
+  #     language: wasm/assemblyscript
+  #     abis:
+  #       - name: SuperRare_V2
+  #         file: ./subgraphs/superrare/abis/SuperRare_V2.json
+  #     entities:
+  #       - Account
+  #       - Contract
+  #       - NFT
+  #     eventHandlers:
+  #       - event: TokenURIUpdated(indexed uint256,string)
+  #         handler: handleUpdateTokenURI
+  #       - event: Transfer(indexed address,indexed address,indexed uint256)
+  #         handler: handleTransfer

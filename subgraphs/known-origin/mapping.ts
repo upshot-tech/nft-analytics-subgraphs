@@ -6,13 +6,12 @@ import * as nfts from "../../utils/entities/nfts";
 import * as saleEvents from "../../utils/entities/saleEvents";
 import * as transferEvents from "../../utils/entities/transferEvents";
 import { Contract, NFT } from "../../types/schema";
-import { typedMapToJson } from "../../utils/data";
 import { ONE } from "../../constants";
 import { getMarketInstance } from "./utils/contract";
 import { getMetadata } from "./utils/nft";
 import {
   Minted,
-  Purchase,
+  PurchaseCall,
   Transfer,
 } from "../../types/Known_Origin_Market/Known_Origin_Market";
 
@@ -68,13 +67,13 @@ export function handleMint(e: Minted): void {
  * Appends a new SaleEvent to the subgraph.
  * Requires existing NFT & Contract entitiies.
  */
-export function handleSold(e: Purchase): void {
-  /* Define the SaleEvent details from the AuctionSuccessful event. */
-  let tokenId = e.params._tokenId;
-  let amount = e.params._priceInWei;
-  let hash = e.transaction.hash;
-  let block = e.block.number;
-  let timestamp = e.block.timestamp;
+export function handleSold(call: PurchaseCall): void {
+  /* Define the SaleEvent details from the Purchase call. */
+  let tokenId = call.outputs.value0;
+  let amount = call.transaction.value;
+  let block = call.block.number;
+  let hash = call.transaction.hash;
+  let timestamp = call.block.timestamp;
   let market = getMarketInstance();
   let owner = market.ownerOf(tokenId);
 
@@ -96,7 +95,7 @@ export function handleSold(e: Purchase): void {
 
   /* Append the transaction to the subgraph. */
   let seller = accounts.get(owner);
-  let buyer = accounts.get(e.params._buyer);
+  let buyer = accounts.get(call.transaction.from);
   let creator = accounts.get(Address.fromString(nft.creator));
 
   contracts.addBuyer(contract as Contract, buyer);

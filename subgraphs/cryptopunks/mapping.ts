@@ -74,8 +74,7 @@ export function handleSold(e: PunkBought): void {
   let hash = e.transaction.hash;
   let block = e.block.number;
   let timestamp = e.block.timestamp;
-  let market = getMarketInstance();
-  let owner = market.punkIndexToAddress(tokenId);
+  let owner = e.params.fromAddress;
 
   /* Require referenced Contract entity. */
   let contractId = cpConstants.CONTRACT_ADDRESS.toHexString();
