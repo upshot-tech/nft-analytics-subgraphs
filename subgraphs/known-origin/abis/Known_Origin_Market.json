@@ -54,28 +54,6 @@
     "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "_tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "name": "_editionNumber",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "name": "_buyer",
-        "type": "address"
-      }
-    ],
-    "name": "Minted",
-    "type": "event"
-  },
-  {
     "constant": false,
     "inputs": [{ "name": "_editionNumber", "type": "uint256" }],
     "name": "purchase",
@@ -85,25 +63,45 @@
     "type": "function"
   },
   {
-    "anonymous": false,
+    "constant": false,
     "inputs": [
-      {
-        "indexed": true,
-        "name": "_from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "_tokenId",
-        "type": "uint256"
-      }
+      { "name": "_to", "type": "address" },
+      { "name": "_editionNumber", "type": "uint256" }
     ],
-    "name": "Transfer",
-    "type": "event"
+    "name": "purchaseTo",
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "editionNumber", "type": "uint256" }],
+    "name": "detailsOfEdition",
+    "outputs": [
+      { "name": "_editionData", "type": "bytes32" },
+      { "name": "_editionType", "type": "uint256" },
+      { "name": "_startDate", "type": "uint256" },
+      { "name": "_endDate", "type": "uint256" },
+      { "name": "_artistAccount", "type": "address" },
+      { "name": "_artistCommission", "type": "uint256" },
+      { "name": "_priceInWei", "type": "uint256" },
+      { "name": "_tokenURI", "type": "string" },
+      { "name": "_totalSupply", "type": "uint256" },
+      { "name": "_totalAvailable", "type": "uint256" },
+      { "name": "_active", "type": "bool" }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "_tokenId", "type": "uint256" }],
+    "name": "editionOfTokenId",
+    "outputs": [{ "name": "_editionNumber", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   }
 ]

@@ -4,7 +4,7 @@ import { ZERO } from "../../constants";
 
 export function getId(contractAddress: Address, tokenId: BigInt): string {
   return contractAddress
-    .toString()
+    .toHexString()
     .concat("/")
     .concat(tokenId.toString());
 }

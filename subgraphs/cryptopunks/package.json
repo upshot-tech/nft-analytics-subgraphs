@@ -1,6 +1,6 @@
 {
   "name": "nft-analytics-subgraph-cryptopunks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "NFT Analytics Subgraph for CryptoPunks",
   "license": "MIT",
   "scripts": {
@@ -8,7 +8,7 @@
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ upshot-tech/nft-analytics-cryptopunks"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.19.0",
-    "@graphprotocol/graph-ts": "^0.19.0"
+    "@graphprotocol/graph-cli": "latest",
+    "@graphprotocol/graph-ts": "latest"
   }
 }
