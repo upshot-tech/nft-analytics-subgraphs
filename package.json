@@ -11,7 +11,8 @@
     "deploy:cryptokitties": "yarn --cwd subgraphs/cryptokitties deploy",
     "deploy:cryptopunks": "yarn --cwd subgraphs/cryptopunks deploy",
     "deploy:known-origin": "yarn --cwd subgraphs/known-origin deploy",
-    "deploy:superrare": "yarn --cwd subgraphs/superrare deploy"
+    "deploy:superrare": "yarn --cwd subgraphs/superrare deploy",
+    "deploy:superrare-v2": "yarn --cwd subgraphs/superrare-v2 deploy"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",

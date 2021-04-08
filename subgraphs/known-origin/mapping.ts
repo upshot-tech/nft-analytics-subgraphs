@@ -25,8 +25,10 @@ export function mint(
 
   let market = getMarketInstance();
   let edition = market.editionOfTokenId(tokenId);
-  let details = market.detailsOfEdition(edition);
-  let creatorAddress = details.value4;
+  let details = market.try_detailsOfEdition(edition);
+  let creatorAddress = details.value
+    ? details.value.value4
+    : (Address.fromI32(0) as Address);
 
   /* Load the contract instance (create if undefined). */
   let contract = getContract();

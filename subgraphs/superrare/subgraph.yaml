@@ -14,7 +14,7 @@ dataSources:
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
-      file: .//mapping.ts
+      file: ./mapping.ts
       language: wasm/assemblyscript
       abis:
         - name: SuperRare_Market

@@ -195,27 +195,51 @@ dataSources:
           handler: handleSold
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-  # - name: SuperRare_V2
-  #   kind: ethereum/contract
-  #   network: mainnet
-  #   source:
-  #     abi: SuperRare_V2
-  #     address: "0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0"
-  #     startBlock: 8486734
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.4
-  #     file: ./subgraphs/superrare/mapping.ts
-  #     language: wasm/assemblyscript
-  #     abis:
-  #       - name: SuperRare_V2
-  #         file: ./subgraphs/superrare/abis/SuperRare_V2.json
-  #     entities:
-  #       - Account
-  #       - Contract
-  #       - NFT
-  #     eventHandlers:
-  #       - event: TokenURIUpdated(indexed uint256,string)
-  #         handler: handleUpdateTokenURI
-  #       - event: Transfer(indexed address,indexed address,indexed uint256)
-  #         handler: handleTransfer
+  - name: SuperRare_v2
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SuperRare_v2
+      address: "0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0"
+      startBlock: 8486734
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/superrare-v2/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: SuperRare_v2
+          file: ./subgraphs/superrare-v2/abis/SuperRare_v2.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - name: SuperRare_v2_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SuperRare_v2_Market
+      address: "0x2947F98C42597966a0ec25e92843c09ac17Fbaa7"
+      startBlock: 8486736
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/superrare-v2/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: SuperRare_v2_Market
+          file: ./subgraphs/superrare-v2/abis/SuperRare_v2_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      eventHandlers:
+        - event: Sold(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleSold
+        - event: AcceptBid(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleSold
