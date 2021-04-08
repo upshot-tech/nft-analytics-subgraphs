@@ -9,7 +9,7 @@ import * as transferEvents from "../../utils/entities/transferEvents";
 import { getMarketInstance, getContract } from "./utils/contract";
 import { Contract, NFT } from "../../types/schema";
 import { ONE } from "../../constants";
-import { Transfer } from "../../types/SuperRare_v2/SuperRare_v2";
+import { Transfer } from "../../types/SuperRare_v2_ERC721/SuperRare_v2_ERC721";
 import { Sold } from "../../types/SuperRare_v2_Market/SuperRare_v2_Market";
 
 /*

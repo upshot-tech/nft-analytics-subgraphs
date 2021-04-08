@@ -4,11 +4,11 @@ repository: https://github.com/upshot-tech/nft-analytics-subgraphs
 schema:
   file: ./schema.graphql
 dataSources:
-  - name: SuperRare_v2
+  - name: SuperRare_v2_ERC721
     kind: ethereum/contract
     network: mainnet
     source:
-      abi: SuperRare_v2
+      abi: SuperRare_v2_ERC721
       address: "0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0"
       startBlock: 8486734
     mapping:
@@ -17,8 +17,8 @@ dataSources:
       file: ./mapping.ts
       language: wasm/assemblyscript
       abis:
-        - name: SuperRare_v2
-          file: ./abis/SuperRare_v2.json
+        - name: SuperRare_v2_ERC721
+          file: ./abis/SuperRare_v2_ERC721.json
       entities:
         - Account
         - Contract
@@ -27,6 +27,7 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+
   - name: SuperRare_v2_Market
     kind: ethereum/contract
     network: mainnet
