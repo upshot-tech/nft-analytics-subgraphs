@@ -15,7 +15,7 @@
     "deploy:superrare-v2": "yarn --cwd subgraphs/superrare-v2 deploy"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
-    "@graphprotocol/graph-ts": "^0.20.0"
+    "@graphprotocol/graph-cli": "^0.20.1",
+    "@graphprotocol/graph-ts": "^0.20.1"
   }
 }
