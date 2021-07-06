@@ -1,11 +1,12 @@
-import { SuperRare_v2 } from "../../../types/SuperRare_v2/SuperRare_v2";
+import { SuperRare_v2_ERC721 } from "../../../types/SuperRare_v2_ERC721/SuperRare_v2_ERC721";
 import { Contract } from "../../../types/schema";
 import * as contracts from "../../../utils/entities/contracts";
 import { CONTRACT_ADDRESS } from "../constants";
 import * as sr2Constants from "../constants";
 
-export function getMarketInstance(): SuperRare_v2 {
-  return SuperRare_v2.bind(CONTRACT_ADDRESS);
+/* Returns an SuperRare V2 ERC721 contract instance. */
+export function getERC721Instance(): SuperRare_v2_ERC721 {
+  return SuperRare_v2_ERC721.bind(CONTRACT_ADDRESS);
 }
 
 export function getContract(): Contract {

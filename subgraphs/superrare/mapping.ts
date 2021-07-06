@@ -7,7 +7,7 @@ import * as saleEvents from "../../utils/entities/saleEvents";
 import * as transferEvents from "../../utils/entities/transferEvents";
 import { Contract, NFT } from "../../types/schema";
 import { ONE } from "../../constants";
-import { getMarketInstance } from "./utils/contract";
+import { getMarketInstance, getContract } from "./utils/contract";
 import { getMetadata } from "./utils/nft";
 import {
   AddNewTokenCall,
@@ -27,16 +27,7 @@ function handleMint(call: AddNewTokenCall, editions: string): void {
   let metadata = getMetadata(tokenURI);
 
   /* Load the contract instance (create if undefined). */
-  let contract = Contract.load(srConstants.CONTRACT_ADDRESS.toHexString());
-  if (contract === null) {
-    contract = contracts.create(
-      srConstants.CONTRACT_ADDRESS,
-      srConstants.CONTRACT_URI,
-      srConstants.CONTRACT_NAME,
-      srConstants.CONTRACT_SYMBOL,
-      srConstants.CONTRACT_METADATA
-    );
-  }
+  let contract = getContract();
   contract.totalMinted = contract.totalMinted.plus(ONE);
   contract.save();
 
@@ -95,14 +86,7 @@ export function handleSold(e: Sold): void {
   let hash = e.transaction.hash;
   let block = e.block.number;
   let timestamp = e.block.timestamp;
-
-  /* Require referenced Contract entity. */
-  let contractId = srConstants.CONTRACT_ADDRESS.toHexString();
-  let contract = Contract.load(srConstants.CONTRACT_ADDRESS.toHexString());
-  if (contract === null) {
-    log.warning("Contract not found: {}", [contractId]);
-    return;
-  }
+  let contract = getContract();
 
   /* Require referenced NFT entity. */
   let nftId = nfts.getId(srConstants.CONTRACT_ADDRESS, tokenId);
@@ -141,14 +125,7 @@ export function handleTransfer(e: Transfer): void {
   let hash = e.transaction.hash;
   let block = e.block.number;
   let timestamp = e.block.timestamp;
-
-  /* Require referenced Contract entity. */
-  let contractId = srConstants.CONTRACT_ADDRESS.toHexString();
-  let contract = Contract.load(srConstants.CONTRACT_ADDRESS.toHexString());
-  if (contract === null) {
-    log.warning("Contract not found: {}", [contractId]);
-    return;
-  }
+  let contract = getContract();
 
   /* Require referenced NFT entity. */
   let nftId = nfts.getId(srConstants.CONTRACT_ADDRESS, tokenId);

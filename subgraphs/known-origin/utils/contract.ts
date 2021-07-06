@@ -4,6 +4,7 @@ import * as contracts from "../../../utils/entities/contracts";
 import { CONTRACT_ADDRESS } from "../constants";
 import * as koConstants from "../constants";
 
+/* Returns a Known Origin market contract instance. */
 export function getMarketInstance(): Market {
   return Market.bind(CONTRACT_ADDRESS);
 }

@@ -1,14 +1,13 @@
 import { Address, BigInt, Bytes, log } from "@graphprotocol/graph-ts";
 import * as sr2Constants from "./constants";
-import { ZERO_ADDRESS } from "../../constants";
 import * as accounts from "../../utils/entities/accounts";
 import * as contracts from "../../utils/entities/contracts";
 import * as nfts from "../../utils/entities/nfts";
 import * as saleEvents from "../../utils/entities/saleEvents";
 import * as transferEvents from "../../utils/entities/transferEvents";
-import { getMarketInstance, getContract } from "./utils/contract";
+import { getERC721Instance, getContract } from "./utils/contract";
 import { Contract, NFT } from "../../types/schema";
-import { ONE } from "../../constants";
+import { ONE, ZERO_ADDRESS } from "../../constants";
 import { Transfer } from "../../types/SuperRare_v2_ERC721/SuperRare_v2_ERC721";
 import { Sold } from "../../types/SuperRare_v2_Market/SuperRare_v2_Market";
 
@@ -25,11 +24,12 @@ export function mint(
   timestamp: BigInt
 ): NFT {
   /* Define the minting details from the Minted event. */
-  let market = getMarketInstance();
+  let erc721 = getERC721Instance();
 
-  let tokenURI = market.try_tokenURI(tokenId).value || "";
+  let tokenURI = erc721.try_tokenURI(tokenId).value || "";
   let creatorAddress =
-    market.try_tokenCreator(tokenId).value || (Address.fromI32(0) as Address);
+    erc721.try_tokenCreator(tokenId).value ||
+    (Address.fromHexString(ZERO_ADDRESS) as Address);
 
   /* Load the contract instance (create if undefined). */
   let contract = getContract();

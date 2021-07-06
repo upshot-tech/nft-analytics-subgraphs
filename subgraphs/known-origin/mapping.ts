@@ -5,7 +5,7 @@ import * as contracts from "../../utils/entities/contracts";
 import * as nfts from "../../utils/entities/nfts";
 import * as saleEvents from "../../utils/entities/saleEvents";
 import { Contract, NFT } from "../../types/schema";
-import { ONE } from "../../constants";
+import { ONE, ZERO_ADDRESS } from "../../constants";
 import { getMarketInstance, getContract } from "./utils/contract";
 import { getMetadata } from "./utils/nft";
 import {
@@ -28,7 +28,7 @@ export function mint(
   let details = market.try_detailsOfEdition(edition);
   let creatorAddress = details.value
     ? details.value.value4
-    : (Address.fromI32(0) as Address);
+    : (Address.fromHexString(ZERO_ADDRESS) as Address);
 
   /* Load the contract instance (create if undefined). */
   let contract = getContract();
@@ -69,7 +69,7 @@ export function sold(
   timestamp: BigInt
 ): void {
   /* Define the SaleEvent details from the Purchase call. */
-  let owner = Address.fromI32(0) as Address; // Minted during purchase
+  let owner = Address.fromHexString(ZERO_ADDRESS) as Address; // Minted during purchase
 
   /* Require referenced NFT entity. */
   let nftId = nfts.getId(koConstants.CONTRACT_ADDRESS, tokenId);
