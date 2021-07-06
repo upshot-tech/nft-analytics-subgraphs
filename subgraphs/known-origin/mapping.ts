@@ -68,9 +68,6 @@ export function sold(
   hash: Bytes,
   timestamp: BigInt
 ): void {
-  /* Define the SaleEvent details from the Purchase call. */
-  let owner = Address.fromHexString(ZERO_ADDRESS) as Address; // Minted during purchase
-
   /* Require referenced NFT entity. */
   let nftId = nfts.getId(koConstants.CONTRACT_ADDRESS, tokenId);
   let nft = NFT.load(nftId);
@@ -79,18 +76,17 @@ export function sold(
   }
 
   /* Append the transaction to the subgraph. */
-  let seller = accounts.get(owner);
   let buyer = accounts.get(to);
   let creator = accounts.get(Address.fromString(nft.creator));
   let contract = getContract();
 
   contracts.addBuyer(contract as Contract, buyer);
-  contracts.addSeller(contract as Contract, seller);
+  contracts.addSeller(contract as Contract, creator);
   saleEvents.create(
     nft as NFT,
     contract as Contract,
     buyer,
-    seller,
+    creator, // Sold by creator
     creator,
     amount,
     block,
