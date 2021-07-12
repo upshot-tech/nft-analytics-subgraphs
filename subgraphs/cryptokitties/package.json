@@ -1,11 +1,11 @@
 {
   "name": "nft-analytics-subgraph-cryptokitties",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NFT Analytics Subgraph for CryptoKitties",
   "license": "MIT",
   "scripts": {
-    "auth": "graph auth https://api.thegraph.com/deploy/",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ upshot-tech/nft-analytics-cryptokitties"
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-cryptokitties"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "latest",

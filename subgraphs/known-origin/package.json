@@ -1,11 +1,11 @@
 {
   "name": "nft-analytics-subgraph-known-origin",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "NFT Analytics Subgraph for Known Origin",
   "license": "MIT",
   "scripts": {
-    "auth": "graph auth https://api.thegraph.com/deploy/",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ upshot-tech/nft-analytics-known-origin"
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-known-origin"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "latest",

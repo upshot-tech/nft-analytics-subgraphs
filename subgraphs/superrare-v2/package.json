@@ -1,11 +1,11 @@
 {
   "name": "nft-analytics-subgraph-superrare-v2",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NFT Analytics Subgraph for SuperRare V2",
   "license": "MIT",
   "scripts": {
-    "auth": "graph auth https://api.thegraph.com/deploy/",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ upshot-tech/nft-analytics-superrare-v2"
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-superrare-v2"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "latest",

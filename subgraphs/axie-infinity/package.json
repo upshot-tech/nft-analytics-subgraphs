@@ -1,11 +1,11 @@
 {
   "name": "nft-analytics-subgraph-axie-infinity",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NFT Analytics Subgraph for Axie Infinity",
   "license": "MIT",
   "scripts": {
-    "auth": "graph auth https://api.thegraph.com/deploy/",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ upshot-tech/nft-analytics-axie-infinity"
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-axie-infinity"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "latest",
