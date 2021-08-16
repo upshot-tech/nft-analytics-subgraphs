@@ -35,6 +35,12 @@ export function get(walletAddress: Address): Account {
     account.totalReceived = ZERO;
     account.totalCreationTransfers = ZERO;
 
+    /* Initialize order counts. */
+    account.totalOrders = ZERO;
+    account.cancelledOrders = ZERO;
+    account.activeOrders = ZERO;
+    account.finalizedOrders = ZERO;
+
     account.save();
   }
 

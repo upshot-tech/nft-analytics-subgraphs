@@ -5,14 +5,20 @@ import * as contracts from "../../utils/entities/contracts";
 import * as nfts from "../../utils/entities/nfts";
 import * as saleEvents from "../../utils/entities/saleEvents";
 import * as transferEvents from "../../utils/entities/transferEvents";
-import { Contract, NFT } from "../../types/schema";
-import { ONE } from "../../constants";
+import * as orders from "../../utils/entities/orders";
+import { Contract, NFT, Order } from "../../types/schema";
+import { ONE, ZERO_ADDRESS } from "../../constants";
 import { getContract } from "./utils/contract";
 import { getMetadata } from "./utils/nft";
+import { getOrderId } from "./utils/order";
 import {
   Assign,
   PunkBought,
   Transfer,
+  PunkBidEntered,
+  PunkBidWithdrawn,
+  PunkNoLongerForSale,
+  PunkOffered,
 } from "../../types/CryptoPunks_Market/CryptoPunks_Market";
 
 /*
@@ -128,4 +134,126 @@ export function handleTransfer(e: Transfer): void {
     hash,
     timestamp
   );
+}
+
+/* Event: A bid has been created. */
+export function handleCreateBid(e: PunkBidEntered): void {
+  /* Define the Order details from the event. */
+  let from = e.params.fromAddress;
+  let tokenId = e.params.punkIndex;
+  let paymentToken = Address.fromString(ZERO_ADDRESS);
+  let basePrice = e.params.value;
+  let type = "Bid";
+  let hash = e.transaction.hash;
+  let block = e.block.number;
+  let timestamp = e.block.timestamp;
+  let contract = getContract();
+
+  /* Require referenced NFT entity. */
+  let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
+  let nft = NFT.load(nftId);
+  if (nft === null) {
+    log.warning("NFT not found: {}", [nftId]);
+    return;
+  }
+
+  /* Append the bid event to the subgraph. */
+  let maker = accounts.get(from);
+
+  orders.create(
+    (nft as NFT),
+    contract,
+    maker,
+    type,
+    paymentToken,
+    basePrice,
+    block,
+    hash,
+    timestamp
+  )
+}
+
+/* Event: A bid has been withdrawn. */
+export function handleWithdrawBid(e: PunkBidWithdrawn): void {
+  /* Define the Order details from the event. */
+  let tokenId = e.params.punkIndex;
+  let contract = getContract();
+
+  /* Require referenced NFT entity. */
+  let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
+  let nft = NFT.load(nftId);
+  if (nft === null) {
+    log.warning("NFT not found: {}", [nftId]);
+    return;
+  }
+
+  let orderId = getOrderId(contract, (nft as NFT));
+  let order = Order.load(orderId);
+  if (order === null) {
+    log.warning("Order not found: {}", [orderId]);
+    return;
+  }
+
+  orders.cancel((order as Order));
+}
+
+/* Event: An offer has been created. */
+export function handlePunkOffered(e: PunkOffered): void {
+  /* Define the Order details from the event. */
+  let from = e.transaction.from;
+  let tokenId = e.params.punkIndex;
+  let paymentToken = Address.fromString(ZERO_ADDRESS);
+  let basePrice = e.params.minValue;
+  let type = "Ask";
+  let hash = e.transaction.hash;
+  let block = e.block.number;
+  let timestamp = e.block.timestamp;
+  let contract = getContract();
+
+  /* Require referenced NFT entity. */
+  let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
+  let nft = NFT.load(nftId);
+  if (nft === null) {
+    log.warning("NFT not found: {}", [nftId]);
+    return;
+  }
+
+  /* Append the ask event to the subgraph. */
+  let maker = accounts.get(from);
+
+  orders.create(
+    (nft as NFT),
+    contract,
+    maker,
+    type,
+    paymentToken,
+    basePrice,
+    block,
+    hash,
+    timestamp
+  )
+}
+
+/* Event: A punk is no longer for sale. */
+export function handlePunkNoLongerForSale(e: PunkNoLongerForSale): void {
+  /* Define the Order details from the event. */
+  let tokenId = e.params.punkIndex;
+  let contract = getContract();
+
+  /* Require referenced NFT entity. */
+  let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
+  let nft = NFT.load(nftId);
+  if (nft === null) {
+    log.warning("NFT not found: {}", [nftId]);
+    return;
+  }
+
+  let orderId = getOrderId(contract, (nft as NFT));
+  let order = Order.load(orderId);
+  if (order === null) {
+    log.warning("Order not found: {}", [orderId]);
+    return;
+  }
+
+  orders.cancel((order as Order));
 }

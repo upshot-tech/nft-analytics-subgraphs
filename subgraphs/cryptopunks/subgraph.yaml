@@ -27,6 +27,7 @@ dataSources:
         - BidEvent
         - SaleEvent
         - TransferEvent
+        - BidEvent
       eventHandlers:
         - event: Assign(indexed address,uint256)
           handler: handleMint
@@ -34,3 +35,9 @@ dataSources:
           handler: handleSold
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: PunkBidEntered(indexed uint256,uint256,indexed address)
+          handler: handleCreateBid
+        - event: PunkBidWithdrawn(indexed uint256,uint256,indexed address)
+          handler: handleWithdrawBid
+        - event PunkOffered(indexed uint256,uint256,indexed address)
+          handler: handlePunkOffered

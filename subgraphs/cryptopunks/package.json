@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "auth": "graph auth --studio",
+    "codegen": "graph codegen --output-dir types/",
     "deploy": "graph deploy --studio nft-analytics-cryptopunks"
   },
   "devDependencies": {

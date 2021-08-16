@@ -35,6 +35,10 @@ export function create(
   nft.totalSalesWei = ZERO;
   nft.avgSaleWei = ZERO;
   nft.totalTransfers = ZERO;
+  nft.totalOrders = ZERO;
+  nft.activeOrders = ZERO;
+  nft.cancelledOrders = ZERO;
+  nft.finalizedOrders = ZERO;
 
   nft.save();
 
