@@ -245,3 +245,107 @@ dataSources:
           handler: handleSold
         - event: AcceptBid(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleSold
+
+  - name: Meebits_OpenSea_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
+      abi: OpenSea_Market
+      startBlock: 12362300
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./subgraphs/meebits/mapping.ts
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      abis:
+        - name: OpenSea_Market
+          file: ./subgraphs/meebits/abis/OpenSea_Market.json
+        - name: Meebits_Market
+          file: ./subgraphs/meebits/abis/Meebits_Market.json
+      callHandlers:
+        - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
+          handler: handleOpenSeaSale
+
+  - name: Meebits_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Meebits_Market
+      address: "0x7Bd29408f11D2bFC23c34f18275bBf23bB716Bc7"
+      startBlock: 12362300
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/meebits/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Meebits_Market
+          file: ./subgraphs/meebits/abis/Meebits_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+        - TransferEvent
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      callHandlers:
+        - function: acceptTrade(address,address,uint256,uint256[],uint256,uint256[],uint256,uint256,bytes)
+          handler: handleMeeBitSale
+
+  - name: BAYC_OpenSea_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
+      abi: OpenSea_Market
+      startBlock: 4605167
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./subgraphs/boredapeyachtclub/mapping.ts
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      abis:
+        - name: OpenSea_Market
+          file: ./subgraphs/boredapeyachtclub/abis/OpenSea_Market.json
+        - name: BAYC_ERC721
+          file: ./subgraphs/boredapeyachtclub/abis/Bored_Ape_Yacht_Club_ERC721.json
+      callHandlers:
+        - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
+          handler: handleOpenSeaSale
+
+  - name: BAYC_ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: BAYC_ERC721
+      address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+      startBlock: 4605169
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./subgraphs/boredapeyachtclub/mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: BAYC_ERC721
+          file: ./subgraphs/boredapeyachtclub/abis/Bored_Ape_Yacht_Club_ERC721.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - TransferEvent
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

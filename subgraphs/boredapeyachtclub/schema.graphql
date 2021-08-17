@@ -113,4 +113,3 @@ type Order @entity {
   timestamp: BigInt!
 }
 
-
