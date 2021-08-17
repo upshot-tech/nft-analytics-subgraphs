@@ -51,7 +51,6 @@ export function handleTransfer(e: Transfer): void {
     hash,
     timestamp
   );
-
 }
 
 export function handleMeebitSale(e: Trade): void {

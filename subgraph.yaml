@@ -296,9 +296,8 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: acceptTrade(address,address,uint256,uint256[],uint256,uint256[],uint256,uint256,bytes)
-          handler: handleMeeBitSale
+        - event: Trade(indexed bytes32,indexed address,address,uint256,uint256[],uint256,uint256[])
+          handler: handleMeebitSale
 
   - name: BAYC_OpenSea_Market
     kind: ethereum/contract
