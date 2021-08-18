@@ -10,7 +10,7 @@ import * as transferEvents from "../../utils/entities/transferEvents"
 import { Contract, NFT } from "../../types/schema";
 import { ONE, ZERO_ADDRESS } from "../../constants";
 import { isSingleTrade, decodeCallData } from "./utils/opensea"
-import { getMetadata } from "./utils/nft";
+import { getTokenUri } from "./utils/nft";
 import { getContract } from "./utils/contract";
 
 import {
@@ -113,8 +113,8 @@ export function mint(
   timestamp: BigInt
 ): NFT {
   /* Define the minting details from the Minted event. */
-  let tokenURI = baycConstants.BASE_TOKEN_URI.concat(tokenId.toString());
-  let metadata = getMetadata(tokenId);
+  let tokenURI = getTokenUri(tokenId);
+  let metadata = "{}"
   let creatorAddress = Address.fromHexString(ZERO_ADDRESS) as Address
 
   /* Load the contract instance (create if undefined). */

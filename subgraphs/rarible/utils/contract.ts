@@ -1,12 +1,18 @@
 import { BigInt, Address, log } from "@graphprotocol/graph-ts";
 import { Contract } from "../../../types/schema";
 import * as contracts from "../../../utils/entities/contracts";
-import { ERC721 as Market } from "../../../types/Rarible_Market/ERC721";
+import { ERC721 } from "../../../types/Rarible_Market/ERC721";
+import { ERC1155 } from "../../../types/Rarible_Market/ERC1155";
+
 import * as rConstants from "../constants";
 
 /* Returns a CryptoPunks market contract instance. */
-export function getMarketInstance(contractAddress: Address): Market {
-  return Market.bind(contractAddress);
+export function getERC721Instance(contractAddress: Address): ERC721 {
+  return ERC721.bind(contractAddress);
+}
+
+export function getERC1155Instance(contractAddress: Address): ERC1155 {
+  return ERC1155.bind(contractAddress);
 }
 
 export function getContract(): Contract {

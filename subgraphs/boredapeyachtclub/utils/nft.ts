@@ -3,7 +3,7 @@ import { getMarketInstance } from "../utils/contract";
 import { getIpfsString } from "../../../utils/data";
 
 /* Returns the Meebits traits constant by tokenID */
-export function getMetadata(tokenId: BigInt): string {
+export function getTokenUri(tokenId: BigInt): string {
   let market = getMarketInstance();
   // Currently ipfs.cat is deprecated, so we are only fetching the tokenURI for now
   let callResult = market.try_tokenURI(tokenId)

@@ -26,6 +26,8 @@ dataSources:
           file: ./abis/Rarible_Market.json
         - name: ERC721
           file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
       eventHandlers:
         - event: Match(bytes32,bytes32,address,address,uint256,uint256,(bytes4,bytes),(bytes4,bytes))
           handler: handleRaribleSale
