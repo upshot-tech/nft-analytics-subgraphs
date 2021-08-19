@@ -12,7 +12,8 @@ export function getTokenUri(tokenId: BigInt): string {
     return "{}"
   }
   else {
-    let tokenURI = callResult.value.toString();
+    let tokenURI = callResult.value;
+    log.warning("URI: {}", [tokenURI])
     return tokenURI
   }
 }

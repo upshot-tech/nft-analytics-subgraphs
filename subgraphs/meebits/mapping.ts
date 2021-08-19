@@ -1,5 +1,5 @@
 
-import { BigInt, Address, Bytes, TypedMap } from "@graphprotocol/graph-ts"
+import { BigInt, Address, Bytes, TypedMap, log} from "@graphprotocol/graph-ts"
 import * as mbConstants from "./constants"
 import * as accounts from "../../utils/entities/accounts";
 import * as contracts from "../../utils/entities/contracts";
@@ -17,9 +17,42 @@ import {
   AtomicMatch_Call
 } from "../../types/Meebits_OpenSea_Market/OpenSea_Market"
 import {
-  Transfer, Trade
+  Transfer, Trade, Mint
 } from "../../types/Meebits_Market/Meebits_Market"
 
+
+export function handleMint(e: Mint): void {
+  let minter = e.params.minter
+  let tokenId = e.params.index
+  let hash = e.transaction.hash;
+  let block = e.block.number;
+  let timestamp = e.block.timestamp;
+
+  let tokenURI = getTokenUri(tokenId)
+  
+  /* Load the contract instance (create if undefined). */
+  let contract = getContract();
+  contract.totalMinted = contract.totalMinted.plus(ONE);
+  contract.save();
+
+  /* Load the creator Account instance (create if undefined). */
+  let creator = accounts.get(minter);
+  contracts.addCreator(contract as Contract, creator);
+  creator.totalCreations = creator.totalCreations.plus(ONE);
+  creator.save();
+
+  /* Append the NFT to the subgraph. */
+  nfts.create(
+    mbConstants.CONTRACT_ADDRESS,
+    tokenId,
+    minter,
+    e.block.number,
+    e.transaction.hash,
+    e.block.timestamp,
+    tokenURI,
+    "{}"
+  );
+}
 
 
 export function handleTransfer(e: Transfer): void {
@@ -35,7 +68,8 @@ export function handleTransfer(e: Transfer): void {
   let nftId = nfts.getId(mbConstants.CONTRACT_ADDRESS, tokenId);
   let nft = NFT.load(nftId);
   if (nft === null) {
-    nft = mint(tokenId, block, hash, timestamp);
+    log.warning("NFT not found: {}", [nftId]);
+    return;
   }
 
   /* Append the transaction to the subgraph. */

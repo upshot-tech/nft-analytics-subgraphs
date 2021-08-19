@@ -10,7 +10,7 @@ import * as transferEvents from "../../utils/entities/transferEvents"
 import { Contract, NFT } from "../../types/schema";
 import { ONE, ZERO_ADDRESS } from "../../constants";
 import { getTokenUri } from "./utils/nft";
-import { getContract } from "./utils/contract";
+import { getContract, getBaseContract } from "./utils/contract";
 import { decodeAssetData, wordLength, isERC721 } from "./utils/rarible"
 
 import {
@@ -41,16 +41,16 @@ export function handleRaribleSale(e: Match): void {
     let amount = BigInt.fromString(rightAmount)
     let contractAddress = Address.fromString(assetData.get("address") as string)
     let tokenId = BigInt.fromString(assetData.get("tokenId") as string)
-    let contract = getContract()
+    let standard = erc721 == true ? "ERC721" : "ERC1155"
+    let contract = getContract(contractAddress, standard)
     // create nft
     let nftId = nfts.getId(contractAddress, tokenId)
     let nft = NFT.load(nftId);
     if (nft === null) {
-      nft = mint(contractAddress, tokenId, erc721, block, hash, timestamp);
+      nft = mint(contractAddress, tokenId, standard, block, hash, timestamp);
     }
     /* Append the transaction to the subgraph. */
     let creator = accounts.get(Address.fromString(nft.creator));
-
     contracts.addBuyer(contract as Contract, buyer);
     contracts.addSeller(contract as Contract, seller);
     saleEvents.create(
@@ -74,16 +74,16 @@ export function handleRaribleSale(e: Match): void {
 
     let contractAddress = Address.fromString(assetData.get("address") as string)
     let tokenId = BigInt.fromString(assetData.get("tokenId") as string)
-    let contract = getContract()
+    let standard = erc721 == true ? "ERC721" : "ERC1155"
+    let contract = getContract(contractAddress, standard)
     // create nft
     let nftId = nfts.getId(contractAddress, tokenId)
     let nft = NFT.load(nftId);
     if (nft === null) {
-      nft = mint(contractAddress, tokenId, erc721, block, hash, timestamp);
+      nft = mint(contractAddress, tokenId, standard, block, hash, timestamp);
     }
     /* Append the transaction to the subgraph. */
     let creator = accounts.get(Address.fromString(nft.creator));
-
     contracts.addBuyer(contract as Contract, buyer);
     contracts.addSeller(contract as Contract, seller);
     saleEvents.create(
@@ -106,18 +106,19 @@ export function handleRaribleSale(e: Match): void {
 export function mint(
   contractAddress: Address,
   tokenId: BigInt,
-  isERC721: boolean,
+  standard: string,
   block: BigInt,
   hash: Bytes,
   timestamp: BigInt
 ): NFT {
+  let isERC721 = standard == "ERC721" ? true : false
   /* Define the minting details from the Minted event. */
   let tokenURI = getTokenUri(contractAddress, tokenId, isERC721);
   let metadata = "{}"
   let creatorAddress = Address.fromHexString(ZERO_ADDRESS) as Address
 
   /* Load the contract instance (create if undefined). */
-  let contract = getContract();
+  let contract = getContract(contractAddress, standard);
   contract.totalMinted = contract.totalMinted.plus(ONE);
   contract.save();
 

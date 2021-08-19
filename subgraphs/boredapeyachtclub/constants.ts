@@ -1,8 +1,8 @@
 import { Address } from "@graphprotocol/graph-ts";
 
 /* Meebits constants */
-export let BASE_TOKEN_URI = "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq";
-export let CONTRACT_URI = "https://boredapeyachtclub.com/#/";
+export let BASE_TOKEN_URI = "https://boredapeyachtclub.com/#/gallery";
+export let CONTRACT_URI = "https://boredapeyachtclub.com/#/home";
 export let CONTRACT_NAME = "Bored Ape Yacht Club";
 export let CONTRACT_SYMBOL = "BAYC";
 export let CONTRACT_ADDRESS = Address.fromString(

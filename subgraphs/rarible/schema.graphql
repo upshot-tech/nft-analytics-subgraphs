@@ -20,6 +20,11 @@ type Account @entity {
   received: [TransferEvent!]! @derivedFrom(field: "to")
 }
 
+enum Standard {
+  ERC721,
+  ERC1155,
+}
+
 type Contract @entity {
   id: ID!
   uri: String!
@@ -37,6 +42,7 @@ type Contract @entity {
   creators: [Account!]!
   buyers: [Account!]!
   sellers: [Account!]!
+  standard: Standard
 }
 
 type NFT @entity {

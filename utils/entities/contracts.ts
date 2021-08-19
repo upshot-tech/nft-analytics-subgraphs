@@ -12,8 +12,9 @@ export function create(
   uri: string,
   name: string,
   symbol: string,
-  metadata: string
-): Contract {
+  metadata: string,
+  standard: string = ""
+  ): Contract {
   let contract = new Contract(contractAddress.toHexString());
 
   /* Initialize contract information */
@@ -33,6 +34,10 @@ export function create(
   contract.buyers = [];
   contract.sellers = [];
   contract.creators = [];
+
+  if (standard != "") {
+    contract.standard = standard
+  }
 
   contract.save();
 

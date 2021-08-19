@@ -6,7 +6,6 @@ import { ERC1155 } from "../../../types/Rarible_Market/ERC1155";
 
 import * as rConstants from "../constants";
 
-/* Returns a CryptoPunks market contract instance. */
 export function getERC721Instance(contractAddress: Address): ERC721 {
   return ERC721.bind(contractAddress);
 }
@@ -15,8 +14,8 @@ export function getERC1155Instance(contractAddress: Address): ERC1155 {
   return ERC1155.bind(contractAddress);
 }
 
-export function getContract(): Contract {
-  let contract = Contract.load(rConstants.CONTRACT_ADDRESS.toHexString());
+export function getBaseContract(): Contract {
+  let contract = Contract.load(rConstants.CONTRACT_ADDRESS.toHexString())
   if (contract === null) {
     contract = contracts.create(
       rConstants.CONTRACT_ADDRESS,
@@ -24,8 +23,35 @@ export function getContract(): Contract {
       rConstants.CONTRACT_NAME,
       rConstants.CONTRACT_SYMBOL,
       rConstants.CONTRACT_METADATA
-    );
+    )
   }
+  return contract as Contract;
+}
 
+
+export function getContract(contractAddress: Address, standard: string): Contract {
+  let contract = Contract.load(contractAddress.toHexString());
+  if (contract === null) {
+    if (contractAddress == rConstants.CONTRACT_ADDRESS) {
+      contract = contracts.create(
+        rConstants.CONTRACT_ADDRESS,
+        rConstants.CONTRACT_URI,
+        rConstants.CONTRACT_NAME,
+        rConstants.CONTRACT_SYMBOL,
+        rConstants.CONTRACT_METADATA,
+        standard
+      )
+    }
+    else {
+      contract = contracts.create(
+        contractAddress,
+        "",
+        "",
+        "",
+        "",
+        standard
+      )
+    }
+  }
   return contract as Contract;
 }

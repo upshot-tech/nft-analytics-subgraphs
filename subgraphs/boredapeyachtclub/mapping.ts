@@ -1,5 +1,5 @@
 
-import { BigInt, Address, Bytes, TypedMap } from "@graphprotocol/graph-ts"
+import { BigInt, Address, Bytes, TypedMap, log } from "@graphprotocol/graph-ts"
 import * as baycConstants from "./constants"
 import * as accounts from "../../utils/entities/accounts";
 import * as contracts from "../../utils/entities/contracts";
@@ -21,7 +21,8 @@ import {
 } from "../../types/BAYC_ERC721/BAYC_ERC721"
 
 
-
+/* the BAYC contract has no mint events, but all Transfer events
+with a fromAddress==ZERO_ADDRESS has a 1:1 mapping of all mints  */
 export function handleTransfer(e: Transfer): void {
   let fromAddress = e.params.from;
   let toAddress = e.params.to;
@@ -31,27 +32,51 @@ export function handleTransfer(e: Transfer): void {
   let timestamp = e.block.timestamp;
   let contract = getContract();
 
-  /* Require referenced NFT entity. */
-  let nftId = nfts.getId(baycConstants.CONTRACT_ADDRESS, tokenId);
-  let nft = NFT.load(nftId);
-  if (nft === null) {
-    nft = mint(tokenId, block, hash, timestamp);
+  if (fromAddress.toHexString() == ZERO_ADDRESS) {
+    let tokenURI = getTokenUri(tokenId)
+    /* Load the contract instance (create if undefined). */
+    contract.totalMinted = contract.totalMinted.plus(ONE);
+    contract.save();
+    /* Load the creator Account instance (create if undefined). */
+    let creator = accounts.get(toAddress);
+    contracts.addCreator(contract as Contract, creator);
+    creator.totalCreations = creator.totalCreations.plus(ONE);
+    creator.save();
+
+    /* Append the NFT to the subgraph. */
+    nfts.create(
+      baycConstants.CONTRACT_ADDRESS,
+      tokenId,
+      toAddress,
+      e.block.number,
+      e.transaction.hash,
+      e.block.timestamp,
+      tokenURI
+    );
   }
+  else {
+    /* Require referenced NFT entity. */
+    let nftId = nfts.getId(baycConstants.CONTRACT_ADDRESS, tokenId);
+    let nft = NFT.load(nftId);
+    if (nft === null) {
+      log.warning("NFT not found: {}", [nftId]);
+      return;
+    }
 
-  /* Append the transaction to the subgraph. */
-  let from = accounts.get(fromAddress);
-  let to = accounts.get(toAddress);
+    /* Append the transaction to the subgraph. */
+    let from = accounts.get(fromAddress);
+    let to = accounts.get(toAddress);
 
-  transferEvents.create(
-    nft as NFT,
-    contract as Contract,
-    from,
-    to,
-    block,
-    hash,
-    timestamp
-  );
-
+    transferEvents.create(
+      nft as NFT,
+      contract as Contract,
+      from,
+      to,
+      block,
+      hash,
+      timestamp
+    );
+  }
 }
 
 export function handleOpenSeaSale(call: AtomicMatch_Call): void {
@@ -82,7 +107,8 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
       let nftId = nfts.getId(baycConstants.CONTRACT_ADDRESS, tokenId)
       let nft = NFT.load(nftId);
       if (nft === null) {
-        nft = mint(tokenId, block, hash, timestamp);
+        log.warning("NFT not found: {}", [nftId]);
+        return;
       }
 
       /* Append the transaction to the subgraph. */
@@ -104,39 +130,4 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
       )
     }
   }
-}
-
-export function mint(
-  tokenId: BigInt,
-  block: BigInt,
-  hash: Bytes,
-  timestamp: BigInt
-): NFT {
-  /* Define the minting details from the Minted event. */
-  let tokenURI = getTokenUri(tokenId);
-  let metadata = "{}"
-  let creatorAddress = Address.fromHexString(ZERO_ADDRESS) as Address
-
-  /* Load the contract instance (create if undefined). */
-  let contract = getContract();
-  contract.totalMinted = contract.totalMinted.plus(ONE);
-  contract.save();
-
-  /* Load the creator Account instance (create if undefined). */
-  let creator = accounts.get(creatorAddress);
-  contracts.addCreator(contract as Contract, creator);
-  creator.totalCreations = creator.totalCreations.plus(ONE);
-  creator.save();
-
-  /* Append the NFT to the subgraph. */
-  return nfts.create(
-    baycConstants.CONTRACT_ADDRESS,
-    tokenId,
-    creatorAddress,
-    block,
-    hash,
-    timestamp,
-    tokenURI,
-    metadata
-  );
 }
