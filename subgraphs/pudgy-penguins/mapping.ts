@@ -1,6 +1,6 @@
 
 import { BigInt, Address, Bytes, TypedMap, log } from "@graphprotocol/graph-ts"
-import * as baycConstants from "./constants"
+import * as ppConstants from "./constants"
 import * as accounts from "../../utils/entities/accounts";
 import * as contracts from "../../utils/entities/contracts";
 import * as nfts from "../../utils/entities/nfts";
@@ -15,10 +15,10 @@ import { getContract } from "./utils/contract";
 
 import {
   AtomicMatch_Call
-} from "../../types/BAYC_OpenSea_Market/OpenSea_Market"
+} from "../../types/PudgyPenguins_OpenSea_Market/OpenSea_Market"
 import {
   Transfer
-} from "../../types/BAYC_ERC721/BAYC_ERC721"
+} from "../../types/Pudgy_Penguins_ERC721/Pudgy_Penguins_ERC721"
 
 
 /* the BAYC contract has no mint events, but all Transfer events
@@ -45,7 +45,7 @@ export function handleTransfer(e: Transfer): void {
 
     /* Append the NFT to the subgraph. */
     nfts.create(
-      baycConstants.CONTRACT_ADDRESS,
+      ppConstants.CONTRACT_ADDRESS,
       tokenId,
       toAddress,
       e.block.number,
@@ -56,7 +56,7 @@ export function handleTransfer(e: Transfer): void {
   }
   else {
     /* Require referenced NFT entity. */
-    let nftId = nfts.getId(baycConstants.CONTRACT_ADDRESS, tokenId);
+    let nftId = nfts.getId(ppConstants.CONTRACT_ADDRESS, tokenId);
     let nft = NFT.load(nftId);
     if (nft === null) {
       log.warning("NFT not found: {}", [nftId]);
@@ -87,7 +87,7 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
     let addrs = call.inputs.addrs
     let nftAddress = addrs[4]
     // Only allow sale events
-    if (nftAddress.toHexString() == baycConstants.CONTRACT_ADDRESS.toHexString()) {
+    if (nftAddress.toHexString() == ppConstants.CONTRACT_ADDRESS.toHexString()) {
       let uints = call.inputs.uints
       // decode opensea calldata
       let buyReplacement = call.inputs.replacementPatternBuy.toHexString()
@@ -104,7 +104,7 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
       let contract = getContract();
 
       // create nft
-      let nftId = nfts.getId(baycConstants.CONTRACT_ADDRESS, tokenId)
+      let nftId = nfts.getId(ppConstants.CONTRACT_ADDRESS, tokenId)
       let nft = NFT.load(nftId);
       if (nft === null) {
         log.warning("NFT not found: {}", [nftId]);
