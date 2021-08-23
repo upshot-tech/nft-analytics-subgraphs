@@ -1,4 +1,4 @@
-import { Address, log } from "@graphprotocol/graph-ts";
+import { Address, log, BigInt } from "@graphprotocol/graph-ts";
 import * as cpConstants from "./constants";
 import * as accounts from "../../utils/entities/accounts";
 import * as contracts from "../../utils/entities/contracts";
@@ -7,19 +7,20 @@ import * as saleEvents from "../../utils/entities/saleEvents";
 import * as transferEvents from "../../utils/entities/transferEvents";
 import * as orders from "../../utils/entities/orders";
 import { Contract, NFT, Order } from "../../types/schema";
-import { ONE, ZERO_ADDRESS } from "../../constants";
+import { ONE, ZERO_ADDRESS, ZERO } from "../../constants";
 import { getContract } from "./utils/contract";
 import { getMetadata } from "./utils/nft";
-import { getOrderId } from "./utils/order";
+import { getOrderId, finalizeAskWithMaker, finalizeBidWithMaker } from "./utils/order";
 import {
   Assign,
   PunkBought,
   Transfer,
+  PunkTransfer,
   PunkBidEntered,
   PunkBidWithdrawn,
   PunkNoLongerForSale,
   PunkOffered,
-} from "../../types/CryptoPunks_Marketv2/CryptoPunks_Market";
+} from "../../types/CryptoPunks_Market/CryptoPunks_Market";
 
 /*
  * Mint event handler
@@ -66,48 +67,59 @@ export function handleMint(e: Assign): void {
  */
 export function handleSold(e: PunkBought): void {
   /* Define the SaleEvent details from the AuctionSuccessful event. */
+  let toAddress = e.params.toAddress
+  let amount = e.params.value
   let tokenId = e.params.punkIndex;
-  let amount = e.params.value;
-  let hash = e.transaction.hash;
-  let block = e.block.number;
-  let timestamp = e.block.timestamp;
-  let owner = e.params.fromAddress;
-  let contract = getContract();
-
-  /* Require referenced NFT entity. */
+  // Reset existing bid from this PUNK
   let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
   let nft = NFT.load(nftId);
   if (nft === null) {
     log.warning("NFT not found: {}", [nftId]);
     return;
   }
+  let hash = e.transaction.hash;
+  let block = e.block.number;
+  let timestamp = e.block.timestamp;
 
-  /* Append the transaction to the subgraph. */
-  let seller = accounts.get(owner);
-  let buyer = accounts.get(e.params.toAddress);
-  let creator = accounts.get(Address.fromString(nft.creator));
-
-  contracts.addBuyer(contract as Contract, buyer);
-  contracts.addSeller(contract as Contract, seller);
-  saleEvents.create(
-    nft as NFT,
-    contract as Contract,
-    buyer,
-    seller,
-    creator,
-    amount,
-    block,
-    hash,
-    timestamp
-  );
+  // The event was emitted by buyPunk call, which means that the buyer has accepted an ASK
+  if (toAddress.toHexString() != ZERO_ADDRESS && amount != BigInt.fromI32(0)) {
+    /* Append the transaction to the subgraph. */
+    let contract = getContract();
+    let owner = e.params.fromAddress;  
+    let buyer = accounts.get(toAddress);
+    let seller = accounts.get(owner);
+    let creator = accounts.get(Address.fromString(nft.creator));
+  
+    contracts.addBuyer(contract as Contract, buyer);
+    contracts.addSeller(contract as Contract, seller);
+    saleEvents.create(
+      nft as NFT,
+      contract as Contract,
+      buyer,
+      seller,
+      creator,
+      amount,
+      block,
+      hash,
+      timestamp
+    );
+    // finalize accepted ASK
+    finalizeAskWithMaker(nft as NFT, e.params.fromAddress)
+  }
+  // The event was emitted by acceptBidForPunk, which means that the seller has accepted an BID (missing toAddress and value so no SaleEvent)
+  else {
+    // finalize the accepted bid
+    let seller = e.params.fromAddress
+    finalizeBidWithMaker(nft as NFT, seller)
+  }
 }
 
 /* Event: An NFT was transferred. */
-export function handleTransfer(e: Transfer): void {
+export function handleTransfer(e: PunkTransfer): void {
   /* Define the Transfer details from the event. */
   let fromAddress = e.params.from;
   let toAddress = e.params.to;
-  let tokenId = e.params.value;
+  let tokenId = e.params.punkIndex;
   let hash = e.transaction.hash;
   let block = e.block.number;
   let timestamp = e.block.timestamp;
