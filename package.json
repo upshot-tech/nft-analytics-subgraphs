@@ -14,6 +14,7 @@
     "deploy:axie-infinity": "yarn --cwd subgraphs/axie-infinity deploy",
     "deploy:cryptokitties": "yarn --cwd subgraphs/cryptokitties deploy",
     "deploy:cryptopunks": "yarn --cwd subgraphs/cryptopunks deploy",
+    "deploy:cryptopunks-v2": "yarn --cwd subgraphs/cryptopunks-v2 deploy",
     "deploy:known-origin": "yarn --cwd subgraphs/known-origin deploy",
     "deploy:superrare": "yarn --cwd subgraphs/superrare deploy",
     "deploy:superrare-v2": "yarn --cwd subgraphs/superrare-v2 deploy"

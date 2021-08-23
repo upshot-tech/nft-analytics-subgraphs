@@ -13,11 +13,21 @@ type Account @entity {
   totalSent: BigInt!
   totalReceived: BigInt!
   totalCreationTransfers: BigInt!
+  totalOrders: BigInt!
+  cancelledOrders: BigInt!
+  activeOrders: BigInt!
+  finalizedOrders: BigInt!
   created: [NFT!]! @derivedFrom(field: "creator")
   bought: [SaleEvent!]! @derivedFrom(field: "buyer")
   sold: [SaleEvent!]! @derivedFrom(field: "seller")
   sent: [TransferEvent!]! @derivedFrom(field: "from")
   received: [TransferEvent!]! @derivedFrom(field: "to")
+  orders: [Order!]! @derivedFrom(field: "maker")
+}
+
+enum Standard {
+  ERC721,
+  ERC1155,
 }
 
 type Contract @entity {
@@ -37,6 +47,7 @@ type Contract @entity {
   creators: [Account!]!
   buyers: [Account!]!
   sellers: [Account!]!
+  standard: Standard
 }
 
 type NFT @entity {
@@ -50,8 +61,13 @@ type NFT @entity {
   totalSalesWei: BigInt!
   avgSaleWei: BigInt!
   totalTransfers: BigInt!
+  totalOrders: BigInt!
+  cancelledOrders: BigInt!
+  activeOrders: BigInt!
+  finalizedOrders: BigInt!
   sales: [SaleEvent!]! @derivedFrom(field: "nft")
   transfers: [TransferEvent!]! @derivedFrom(field: "nft")
+  orders: [Order!]! @derivedFrom(field: "nft")
   block: BigInt!
   hash: Bytes!
   timestamp: BigInt!
@@ -69,6 +85,7 @@ type SaleEvent @entity {
   block: BigInt!
   hash: Bytes!
   timestamp: BigInt!
+  paymentToken: Account
 }
 
 type TransferEvent @entity {
@@ -82,3 +99,34 @@ type TransferEvent @entity {
   hash: Bytes!
   timestamp: BigInt!
 }
+
+enum OrderType {
+  Bid,
+  Ask,
+}
+
+enum OrderState {
+  Cancelled,
+  Active,
+  Finalized,
+}
+
+type Order @entity {
+  id: ID!
+  contract: Contract!
+  nft: NFT!
+  maker: Account!
+  taker: Account
+  type: OrderType!
+  state: OrderState!
+  paymentToken: Bytes!
+  basePrice: BigInt!
+  staticTarget: Bytes
+  staticExtraData: Bytes
+  extra: BigInt
+  expiration: BigInt
+  block: BigInt!
+  hash: Bytes!
+  timestamp: BigInt!
+}
+

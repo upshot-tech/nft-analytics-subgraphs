@@ -10,7 +10,7 @@ dataSources:
     source:
       abi: CryptoPunks_Market
       address: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB"
-      startBlock: 11255987
+      startBlock: 3900000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

@@ -20,7 +20,7 @@ import {
   PunkBidWithdrawn,
   PunkNoLongerForSale,
   PunkOffered,
-} from "../../types/CryptoPunks_Market/CryptoPunks_Market";
+} from "../../types/CryptoPunks_Marketv2/CryptoPunks_Market";
 
 /*
  * Mint event handler

@@ -11,6 +11,7 @@ export let CONTRACT_ADDRESS = Address.fromString(
 export let CONTRACT_METADATA =
   '{"image":"https://www.larvalabs.com/public/images/cryptopunks/punks.png","hash":"ac39af4793119ee46bbff351d8cb6b5f23da60222126add4268e261199a2921b"}';
 export let NFT_METADATA_TRAITS = new TypedMap<string, string>();
+/*
 NFT_METADATA_TRAITS.set("0", "{\"type\":\"female\",\"accessories\":[\"blonde bob\",\"earring\",\"green eye shadow\"]}");
 NFT_METADATA_TRAITS.set("1", "{\"type\":\"male\",\"accessories\":[\"mohawk\",\"smile\"]}");
 NFT_METADATA_TRAITS.set("2", "{\"type\":\"female\",\"accessories\":[\"wild hair\"]}");
@@ -10011,3 +10012,4 @@ NFT_METADATA_TRAITS.set("9996", "{\"type\":\"male\",\"accessories\":[\"cigarette
 NFT_METADATA_TRAITS.set("9997", "{\"type\":\"zombie\",\"accessories\":[\"cap forward\",\"front beard\"]}");
 NFT_METADATA_TRAITS.set("9998", "{\"type\":\"female\",\"accessories\":[\"black lipstick\",\"clown eyes green\",\"wild white hair\"]}");
 NFT_METADATA_TRAITS.set("9999", "{\"type\":\"female\",\"accessories\":[\"mohawk\",\"nerd glasses\"]}");
+*/
