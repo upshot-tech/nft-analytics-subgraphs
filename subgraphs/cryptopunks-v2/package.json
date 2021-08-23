@@ -1,0 +1,14 @@
+{
+  "name": "nft-analytics-cryptopunksv2",
+  "version": "0.2.0",
+  "description": "NFT Analytics Subgraph for CryptoPunks",
+  "license": "MIT",
+  "scripts": {
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-cryptopunksv2"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "latest",
+    "@graphprotocol/graph-ts": "latest"
+  }
+}

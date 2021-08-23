@@ -17,7 +17,7 @@ export function create(
   hash: Bytes,
   timestamp: BigInt,
   uri: string = "",
-  metadata: string = "{}",
+  metadata: string = "{}"
 ): NFT {
   /* Create an NFT instance. */
   let nft = new NFT(getId(contractAddress, tokenId));
@@ -35,6 +35,10 @@ export function create(
   nft.totalSalesWei = ZERO;
   nft.avgSaleWei = ZERO;
   nft.totalTransfers = ZERO;
+  nft.totalOrders = ZERO;
+  nft.activeOrders = ZERO;
+  nft.cancelledOrders = ZERO;
+  nft.finalizedOrders = ZERO;
 
   nft.save();
 

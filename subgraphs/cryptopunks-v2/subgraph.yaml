@@ -1,0 +1,36 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraph for CryptoPunks
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: CryptoPunks_Marketv2
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: CryptoPunks_Market
+      address: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB"
+      startBlock: 11255987
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: CryptoPunks_Market
+          file: ./abis/CryptoPunks_Market.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - AskEvent
+        - BidEvent
+        - SaleEvent
+        - TransferEvent
+      eventHandlers:
+        - event: Assign(indexed address,uint256)
+          handler: handleMint
+        - event: PunkBought(indexed uint256,uint256,indexed address,indexed address)
+          handler: handleSold
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
