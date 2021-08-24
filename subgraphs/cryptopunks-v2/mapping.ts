@@ -10,16 +10,16 @@ import { Contract, NFT, Order } from "../../types/schema";
 import { ONE, ZERO_ADDRESS, ZERO } from "../../constants";
 import { getContract } from "./utils/contract";
 import { getMetadata } from "./utils/nft";
-import { getOrderId, finalizeAskWithMaker, finalizeBidWithMaker } from "./utils/order";
+import { getOrderId, finalizeOrder, addOrderForPunk, getOrderForPunk } from "./utils/order";
 import {
   Assign,
   PunkBought,
-  Transfer,
   PunkTransfer,
   PunkBidEntered,
   PunkBidWithdrawn,
   PunkNoLongerForSale,
   PunkOffered,
+  AcceptBidForPunkCall,
 } from "../../types/CryptoPunks_Marketv2/CryptoPunks_Market";
 
 /*
@@ -59,32 +59,79 @@ export function handleMint(e: Assign): void {
   );
 }
 
-/*
- * Sale event handler
- *
- * Appends a new SaleEvent to the subgraph.
- * Requires existing NFT & Contract entitiies.
- */
-export function handleSold(e: PunkBought): void {
-  /* Define the SaleEvent details from the AuctionSuccessful event. */
-  let toAddress = e.params.toAddress
-  let amount = e.params.value
-  let tokenId = e.params.punkIndex;
-  // Reset existing bid from this PUNK
+
+// The event was emitted by acceptBidForPunk, which means that the seller has accepted an BID
+// We fetch the accepted bid for the sale to fill in the missing info for a sale event
+export function handleAcceptedBid(call: AcceptBidForPunkCall): void {
+  let minPrice = call.inputs.minPrice
+  let tokenId = call.inputs.punkIndex
   let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
   let nft = NFT.load(nftId);
   if (nft === null) {
     log.warning("NFT not found: {}", [nftId]);
     return;
   }
-  let hash = e.transaction.hash;
-  let block = e.block.number;
-  let timestamp = e.block.timestamp;
+  let contract = getContract();
+  let hash = call.transaction.hash;
+  let block = call.block.number;
+  let timestamp = call.block.timestamp;
+  // load the accepted bid
+  let bidForPunk = getOrderForPunk(nft as NFT, "Bid")
+  if (bidForPunk == null) {
+    log.warning("Failed to find order acceptedBid: {}", [nft.id.toString()])
+    return
+  }
 
+  let seller = accounts.get(call.from)
+  let buyer = accounts.get(Address.fromString(bidForPunk.maker))
+  let creator = accounts.get(Address.fromString(nft.creator));
+  let amount = minPrice
+  contracts.addBuyer(contract as Contract, buyer);
+  contracts.addSeller(contract as Contract, seller);
+  saleEvents.create(
+    nft as NFT,
+    contract as Contract,
+    buyer,
+    seller,
+    creator,
+    amount,
+    block,
+    hash,
+    timestamp
+  );
+
+  let found = finalizeOrder(nft as NFT, Address.fromString(bidForPunk.maker))
+  if (!found) {
+    log.warning("Failed to finalize order for AcceptBidForPunkCall: {}", [hash.toHexString()])
+  }
+}
+
+/*
+  The PunkBought event is triggerd in two ways:
+    1) Through the buyPunk function call which emits necessary data to register a sale event
+    2) Throught the acceptBidForPunk call which emits zero values for the toAddress and value parameter.
+  We handle 2) separately in it's own handler to fill in the zero values.
+*/
+export function handleSold(e: PunkBought): void {
+  /* Define the SaleEvent details from the AuctionSuccessful event. */
+  let toAddress = e.params.toAddress
+  let amount = e.params.value
   // The event was emitted by buyPunk call, which means that the buyer has accepted an ASK
   if (toAddress.toHexString() != ZERO_ADDRESS && amount != BigInt.fromI32(0)) {
-    /* Append the transaction to the subgraph. */
+    let tokenId = e.params.punkIndex;
+    // Reset existing bid from this PUNK
+    let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
+    let nft = NFT.load(nftId);
+    if (nft === null) {
+      log.warning("NFT not found: {}", [nftId]);
+      return;
+    }
+    let hash = e.transaction.hash;
+    let block = e.block.number;
+    let timestamp = e.block.timestamp;
     let contract = getContract();
+
+    /* Append the transaction to the subgraph. */
     let owner = e.params.fromAddress;  
     let buyer = accounts.get(toAddress);
     let seller = accounts.get(owner);
@@ -104,13 +151,10 @@ export function handleSold(e: PunkBought): void {
       timestamp
     );
     // finalize accepted ASK
-    finalizeAskWithMaker(nft as NFT, e.params.fromAddress)
-  }
-  // The event was emitted by acceptBidForPunk, which means that the seller has accepted an BID (missing toAddress and value so no SaleEvent)
-  else {
-    // finalize the accepted bid
-    let seller = e.params.fromAddress
-    finalizeBidWithMaker(nft as NFT, seller)
+    let found = finalizeOrder(nft as NFT, e.params.fromAddress)
+    if (!found) {
+      log.warning("Failed to finalize order for PunkBought: {}", [hash.toHexString()])
+    }
   }
 }
 
@@ -171,8 +215,7 @@ export function handleCreateBid(e: PunkBidEntered): void {
 
   /* Append the bid event to the subgraph. */
   let maker = accounts.get(from);
-
-  orders.create(
+  addOrderForPunk(
     (nft as NFT),
     contract,
     maker,
@@ -183,30 +226,6 @@ export function handleCreateBid(e: PunkBidEntered): void {
     hash,
     timestamp
   )
-}
-
-/* Event: A bid has been withdrawn. */
-export function handleWithdrawBid(e: PunkBidWithdrawn): void {
-  /* Define the Order details from the event. */
-  let tokenId = e.params.punkIndex;
-  let contract = getContract();
-
-  /* Require referenced NFT entity. */
-  let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
-  let nft = NFT.load(nftId);
-  if (nft === null) {
-    log.warning("NFT not found: {}", [nftId]);
-    return;
-  }
-
-  let orderId = getOrderId(contract, (nft as NFT));
-  let order = Order.load(orderId);
-  if (order === null) {
-    log.warning("Order not found: {}", [orderId]);
-    return;
-  }
-
-  orders.cancel((order as Order));
 }
 
 /* Event: An offer has been created. */
@@ -233,7 +252,7 @@ export function handlePunkOffered(e: PunkOffered): void {
   /* Append the ask event to the subgraph. */
   let maker = accounts.get(from);
 
-  orders.create(
+  addOrderForPunk(
     (nft as NFT),
     contract,
     maker,
@@ -246,10 +265,11 @@ export function handlePunkOffered(e: PunkOffered): void {
   )
 }
 
-/* Event: A punk is no longer for sale. */
-export function handlePunkNoLongerForSale(e: PunkNoLongerForSale): void {
+/* Event: A bid has been withdrawn. */
+export function handleWithdrawBid(e: PunkBidWithdrawn): void {
   /* Define the Order details from the event. */
   let tokenId = e.params.punkIndex;
+  let maker = e.params.fromAddress;
   let contract = getContract();
 
   /* Require referenced NFT entity. */
@@ -260,10 +280,33 @@ export function handlePunkNoLongerForSale(e: PunkNoLongerForSale): void {
     return;
   }
 
-  let orderId = getOrderId(contract, (nft as NFT));
-  let order = Order.load(orderId);
+  let order = getOrderForPunk(nft as NFT, "Bid")
+  if (order === null || Address.fromString(order.maker) != maker) {
+    log.warning("Failed to find order for PunkBidWithdrawn: {}", [e.transaction.hash.toHexString()]);
+    return;
+  }
+  orders.cancel((order as Order));
+}
+
+/* Event: A punk is no longer for sale. */
+export function handlePunkNoLongerForSale(e: PunkNoLongerForSale): void {
+  /* Define the Order details from the event. */
+  let tokenId = e.params.punkIndex;
+  let contract = getContract();
+
+  /* Require referenced NFT entity. */
+  let nftId = nfts.getId(cpConstants.CONTRACT_ADDRESS, tokenId);
+  let nft = NFT.load(nftId);
+
+
+  if (nft === null) {
+    log.warning("NFT not found: {}", [nftId]);
+    return;
+  }
+
+  let order = getOrderForPunk(nft as NFT, "Ask")
   if (order === null) {
-    log.warning("Order not found: {}", [orderId]);
+    log.warning("Failed to find order for PunkNoLongerForSale: {}", [e.transaction.hash.toHexString()]);
     return;
   }
 

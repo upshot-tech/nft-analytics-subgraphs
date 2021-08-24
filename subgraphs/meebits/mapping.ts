@@ -24,9 +24,6 @@ import {
 export function handleMint(e: Mint): void {
   let minter = e.params.minter
   let tokenId = e.params.index
-  let hash = e.transaction.hash;
-  let block = e.block.number;
-  let timestamp = e.block.timestamp;
 
   let tokenURI = getTokenUri(tokenId)
   

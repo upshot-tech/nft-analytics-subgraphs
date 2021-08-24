@@ -4,13 +4,15 @@ repository: https://github.com/upshot-tech/nft-analytics-subgraphs
 schema:
   file: ./schema.graphql
 dataSources:
+
+
   - name: BAYC_OpenSea_Market
     kind: ethereum/contract
     network: mainnet
     source:
       address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
       abi: OpenSea_Market
-      startBlock: 12316589
+      startBlock: 12287507
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -36,7 +38,7 @@ dataSources:
     source:
       abi: BAYC_ERC721
       address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
-      startBlock: 12316589
+      startBlock: 12287507
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -50,6 +52,9 @@ dataSources:
         - Contract
         - NFT
         - TransferEvent
+      callHandlers:
+        - function: mintApe(uint)
+          handler: handleMintApe
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

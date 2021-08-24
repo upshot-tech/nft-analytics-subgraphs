@@ -32,5 +32,14 @@ dataSources:
           handler: handleMint
         - event: PunkBought(indexed uint256,uint256,indexed address,indexed address)
           handler: handleSold
-        - event: Transfer(indexed address,indexed address,uint256)
+        - event: PunkTransfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: PunkBidEntered(indexed uint256,uint256,indexed address)
+          handler: handleCreateBid
+        - event: PunkBidWithdrawn(indexed uint256,uint256,indexed address)
+          handler: handleWithdrawBid
+        - event: PunkOffered(indexed uint256,uint256,indexed address)
+          handler: handlePunkOffered
+      callHandlers:
+        - function: acceptBidForPunk(uint256,uint256)
+          handler: handleAcceptedBid
