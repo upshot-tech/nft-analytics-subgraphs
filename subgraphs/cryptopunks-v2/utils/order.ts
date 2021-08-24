@@ -82,25 +82,3 @@ export function getOrderForPunk(nft: NFT, type: string): Order | null {
   }
   return null
 }
-
-export function finalizeOrder(nft: NFT, maker: Address): boolean {
-  let nbOrders = nft.totalOrders
-  let contract = getContract()
-  for (let i = 0; i < parseInt(nbOrders.toString()); i++) {
-    let orderId = contract.id
-    .concat("/")
-    .concat(nft.id)
-    .concat("/")
-    .concat(i.toString());
-    // if order created by maker, finalize it
-    let order = Order.load(orderId)
-    if (order === null) {
-      continue;
-    }
-    if (order.maker == maker.toHexString() && order.state == "Active") {
-      orders.finalize(order as Order)
-      return true
-    }
-  }
-  return false
-}

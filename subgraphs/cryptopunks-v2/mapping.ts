@@ -10,7 +10,7 @@ import { Contract, NFT, Order } from "../../types/schema";
 import { ONE, ZERO_ADDRESS, ZERO } from "../../constants";
 import { getContract } from "./utils/contract";
 import { getMetadata } from "./utils/nft";
-import { getOrderId, finalizeOrder, addOrderForPunk, getOrderForPunk } from "./utils/order";
+import { addOrderForPunk, getOrderForPunk } from "./utils/order";
 import {
   Assign,
   PunkBought,
@@ -60,7 +60,7 @@ export function handleMint(e: Assign): void {
 }
 
 
-// The event was emitted by acceptBidForPunk, which means that the seller has accepted an BID
+// This was called by acceptBidForPunk, which means that the seller has accepted a BID
 // We fetch the accepted bid for the sale to fill in the missing info for a sale event
 export function handleAcceptedBid(call: AcceptBidForPunkCall): void {
   let minPrice = call.inputs.minPrice
@@ -85,7 +85,7 @@ export function handleAcceptedBid(call: AcceptBidForPunkCall): void {
   let seller = accounts.get(call.from)
   let buyer = accounts.get(Address.fromString(bidForPunk.maker))
   let creator = accounts.get(Address.fromString(nft.creator));
-  let amount = minPrice
+  let amount = bidForPunk.basePrice
   contracts.addBuyer(contract as Contract, buyer);
   contracts.addSeller(contract as Contract, seller);
   saleEvents.create(
@@ -99,11 +99,8 @@ export function handleAcceptedBid(call: AcceptBidForPunkCall): void {
     hash,
     timestamp
   );
-
-  let found = finalizeOrder(nft as NFT, Address.fromString(bidForPunk.maker))
-  if (!found) {
-    log.warning("Failed to finalize order for AcceptBidForPunkCall: {}", [hash.toHexString()])
-  }
+  // finalize accepted bid
+  orders.finalize(bidForPunk as Order)
 }
 
 /*
@@ -151,10 +148,12 @@ export function handleSold(e: PunkBought): void {
       timestamp
     );
     // finalize accepted ASK
-    let found = finalizeOrder(nft as NFT, e.params.fromAddress)
-    if (!found) {
-      log.warning("Failed to finalize order for PunkBought: {}", [hash.toHexString()])
+    let askForPunk = getOrderForPunk(nft as NFT, "Ask")
+    if (askForPunk == null) {
+      log.warning("Failed to find order PunkBought: {}", [e.transaction.hash.toHexString()])
+      return
     }
+    orders.finalize(askForPunk as Order)
   }
 }
 
