@@ -101,7 +101,7 @@ export function handleTransfer(e: Transfer): void {
   /* Define the Transfer details from the event. */
   let fromAddress = e.params.from;
   let toAddress = e.params.to;
-  let tokenId = e.params.value;
+  let tokenId = e.params.punkIndex;
   let hash = e.transaction.hash;
   let block = e.block.number;
   let timestamp = e.block.timestamp;
