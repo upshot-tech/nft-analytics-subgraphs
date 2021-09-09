@@ -4,13 +4,15 @@ repository: https://github.com/upshot-tech/nft-analytics-subgraphs
 schema:
   file: ./schema.graphql
 dataSources:
-  - name: BAYC_OpenSea_Market
+
+
+  - name: HashMasks_OpenSea_Market
     kind: ethereum/contract
     network: mainnet
     source:
       address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
       abi: OpenSea_Market
-      startBlock: 12287507
+      startBlock: 11743743 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -24,35 +26,32 @@ dataSources:
       abis:
         - name: OpenSea_Market
           file: ./abis/OpenSea_Market.json
-        - name: BAYC_ERC721
-          file: ./abis/Bored_Ape_Yacht_Club_ERC721.json
+        - name: HashMasks_ERC721
+          file: ./abis/HashMasks_ERC721.json
       callHandlers:
         - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
           handler: handleOpenSeaSale
 
-  - name: BAYC_ERC721
+  - name: HashMasks_ERC721
     kind: ethereum/contract
     network: mainnet
     source:
-      abi: BAYC_ERC721
-      address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
-      startBlock: 12287507
+      abi: HashMasks_ERC721
+      address: "0xC2C747E0F7004F9E8817Db2ca4997657a7746928"
+      startBlock: 11743743
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       file: ./mapping.ts
       language: wasm/assemblyscript
       abis:
-        - name: BAYC_ERC721
-          file: ./abis/Bored_Ape_Yacht_Club_ERC721.json
+        - name: HashMasks_ERC721
+          file: ./abis/HashMasks_ERC721.json
       entities:
         - Account
         - Contract
         - NFT
         - TransferEvent
-      callHandlers:
-        - function: mintApe(uint)
-          handler: handleMintApe
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

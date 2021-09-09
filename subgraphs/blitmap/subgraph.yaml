@@ -1,10 +1,10 @@
 specVersion: 0.0.2
-description: NFT Analytics Subgraph for Bored Ape Yacht Club
+description: NFT Analytics Subgraph for Blitmaps
 repository: https://github.com/upshot-tech/nft-analytics-subgraphs
 schema:
   file: ./schema.graphql
 dataSources:
-  - name: BAYC_OpenSea_Market
+  - name: Blitmap_OpenSea_Market
     kind: ethereum/contract
     network: mainnet
     source:
@@ -24,18 +24,18 @@ dataSources:
       abis:
         - name: OpenSea_Market
           file: ./abis/OpenSea_Market.json
-        - name: BAYC_ERC721
-          file: ./abis/Bored_Ape_Yacht_Club_ERC721.json
+        - name: Blitmap_ERC721
+          file: ./abis/Blitmap_ERC721.json
       callHandlers:
         - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
           handler: handleOpenSeaSale
 
-  - name: BAYC_ERC721
+  - name: Blitmap_ERC721
     kind: ethereum/contract
     network: mainnet
     source:
-      abi: BAYC_ERC721
-      address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+      abi: Blitmap_ERC721
+      address: "0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63"
       startBlock: 12287507
     mapping:
       kind: ethereum/events
@@ -43,16 +43,13 @@ dataSources:
       file: ./mapping.ts
       language: wasm/assemblyscript
       abis:
-        - name: BAYC_ERC721
-          file: ./abis/Bored_Ape_Yacht_Club_ERC721.json
+        - name: Blitmap_ERC721
+          file: ./abis/Blitmap_ERC721.json
       entities:
         - Account
         - Contract
         - NFT
         - TransferEvent
-      callHandlers:
-        - function: mintApe(uint)
-          handler: handleMintApe
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

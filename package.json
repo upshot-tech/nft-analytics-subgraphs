@@ -7,6 +7,8 @@
     "build": "graph build",
     "auth": "graph auth --studio",
     "codegen": "graph codegen --output-dir types/",
+    "deploy:loot": "yarn --cwd subgraphs/loot deploy",
+    "deploy:hashmasks": "yarn --cwd subgraphs/hashmasks deploy",
     "deploy:pudgypenguins": "yarn --cwd subgraphs/pudgy-penguins deploy",
     "deploy:rarible": "yarn --cwd subgraphs/rarible deploy",
     "deploy:bayc": "yarn --cwd subgraphs/boredapeyachtclub deploy",
