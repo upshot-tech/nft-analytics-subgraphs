@@ -85,7 +85,7 @@ type SaleEvent @entity {
   block: BigInt!
   hash: Bytes!
   timestamp: BigInt!
-  paymentToken: Account
+  paymentToken: String
 }
 
 type TransferEvent @entity {

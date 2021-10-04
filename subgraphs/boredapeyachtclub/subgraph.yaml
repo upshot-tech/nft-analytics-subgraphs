@@ -50,9 +50,6 @@ dataSources:
         - Contract
         - NFT
         - TransferEvent
-      callHandlers:
-        - function: mintApe(uint)
-          handler: handleMintApe
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

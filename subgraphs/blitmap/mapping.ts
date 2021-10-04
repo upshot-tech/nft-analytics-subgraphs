@@ -21,7 +21,7 @@ import {
 } from "../../types/Blitmap_ERC721/Blitmap_ERC721"
 
 
-/* the BAYC contract has no mint events, but all Transfer events
+/* the Blitmap contract has no mint events, but all Transfer events
 with a fromAddress==ZERO_ADDRESS has a 1:1 mapping of all mints  */
 export function handleTransfer(e: Transfer): void {
   let fromAddress = e.params.from;
@@ -96,7 +96,7 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
       let buyer = accounts.get(Address.fromString(decodedCallData.get("buyer") as string))
       let seller = accounts.get(Address.fromString(decodedCallData.get("seller") as string))
       let tokenId = BigInt.fromString(decodedCallData.get("tokenId") as string)
-      let paymentToken = addrs[6]
+      let paymentToken = addrs[6].toHexString()
       let amount = uints[4]
       let block = call.block.number;
       let hash = call.transaction.hash;
@@ -126,7 +126,7 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
         hash,
         timestamp,
         "{}",
-        paymentToken.toHexString()
+        paymentToken
       )
     }
   }

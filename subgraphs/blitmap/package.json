@@ -1,11 +1,11 @@
 {
-  "name": "nft-analytics-hashmasks",
+  "name": "nft-analytics-blitmap",
   "version": "0.2.0",
   "description": "NFT Analytics Subgraph for Hashmasks",
   "license": "MIT",
   "scripts": {
     "auth": "graph auth --studio",
-    "deploy": "graph deploy --studio nft-analytics-hashmasks"
+    "deploy": "graph deploy --studio nft-analytics-blitmap"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "latest",

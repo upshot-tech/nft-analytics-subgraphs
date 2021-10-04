@@ -13,7 +13,7 @@ export function create(
   hash: Bytes,
   timestamp: BigInt,
   metadata: string = "{}",
-  paymentToken: string = null,
+  paymentToken: string = "",
 ): void {
   /* Record the new sales event */
   let saleId = contract.id
@@ -28,7 +28,7 @@ export function create(
   sale.contract = contract.id;
   sale.nft = nft.id;
   sale.amount = amount;
-  sale.paymentToken = paymentToken
+  sale.paymentToken = paymentToken;
   sale.buyer = buyer.id;
   sale.seller = seller.id;
   sale.block = block;

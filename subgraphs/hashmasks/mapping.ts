@@ -94,7 +94,7 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
       let buyer = accounts.get(Address.fromString(decodedCallData.get("buyer") as string))
       let seller = accounts.get(Address.fromString(decodedCallData.get("seller") as string))
       let tokenId = BigInt.fromString(decodedCallData.get("tokenId") as string)
-      let paymentToken = addrs[6]
+      let paymentToken = addrs[6].toHexString()
       let amount = uints[4]
       let block = call.block.number;
       let hash = call.transaction.hash;
@@ -108,7 +108,6 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
         log.warning("NFT not found: {}", [nftId]);
         return;
       }
-
       /* Append the transaction to the subgraph. */
       let creator = accounts.get(Address.fromString(nft.creator));
       contracts.addBuyer(contract as Contract, buyer);
@@ -124,7 +123,7 @@ export function handleOpenSeaSale(call: AtomicMatch_Call): void {
         hash,
         timestamp,
         "{}",
-        paymentToken.toHexString()
+        paymentToken
       )
     }
   }

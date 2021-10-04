@@ -11,11 +11,24 @@ This collection of subgraphs for [The Graph](https://thegraph.com) indexes NFT s
 - CryptoPunks (`0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB`)
 - Known Origin (`0xfbeef911dc5821886e1dda71586d90ed28174b7d`)
 - SuperRare (`0x41a322b28d0ff354040e2cbc676f0320d8c8850d`)
+- Bored Ape Yacht Club (`0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D`)
+- Hashmasks (`0xC2C747E0F7004F9E8817Db2ca4997657a7746928`)
+- Loot (`0xFF9C1b15B16263C61d017ee9F65C50e4AE0113D7`)
+- Meebits (`0x7Bd29408f11D2bFC23c34f18275bBf23bB716Bc7`)
+- PudgyPenguins (`0xBd3531dA5CF5857e7CfAA92426877b022e612cf8`)
+- Blitmap (`0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63`)
 
 View on The Graph:
 
 - [NFT Analytics: Axie Infinity](https://thegraph.com/explorer/subgraph/upshot-tech/nft-analytics-axie-infinity)
 - [NFT Analytics: CryptoKitties](https://thegraph.com/explorer/subgraph/upshot-tech/nft-analytics-cryptokitties)
-- [NFT Analytics: CryptoPunks](https://thegraph.com/explorer/subgraph/upshot-tech/nft-analytics-cryptopunks)
+- [NFT Analytics: CryptoPunks](https://thegraph.com/studio/subgraph/nft-analytics-cryptopunksv2)
 - [NFT Analytics: Known Origin](https://thegraph.com/explorer/subgraph/upshot-tech/nft-analytics-known-origin)
 - [NFT Analytics: SuperRare](https://thegraph.com/explorer/subgraph/upshot-tech/nft-analytics-superrare)
+- [NFT Analytics: Bored Ape Yacht Club](https://thegraph.com/studio/subgraph/nft-analytics-bayc)
+- [NFT Analytics: Hashmasks](https://thegraph.com/studio/subgraph/nft-analytics-hashmasks)
+- [NFT Analytics: Loot](https://thegraph.com/studio/subgraph/nft-analytics-loot)
+- [NFT Analytics: Meebits](https://thegraph.com/studio/subgraph/nft-analytics-meebits)
+- [NFT Analytics: PudgyPenguins](https://thegraph.com/studio/subgraph/nft-analytics-pudgypenguins)
+- [NFT Analytics: Blitmap](https://thegraph.com/studio/subgraph/nft-analytics-blitmap/)
+

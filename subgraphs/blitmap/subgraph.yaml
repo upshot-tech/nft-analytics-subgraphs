@@ -10,7 +10,7 @@ dataSources:
     source:
       address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
       abi: OpenSea_Market
-      startBlock: 12287507
+      startBlock: 12439123 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -36,7 +36,7 @@ dataSources:
     source:
       abi: Blitmap_ERC721
       address: "0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63"
-      startBlock: 12287507
+      startBlock: 12439123
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
