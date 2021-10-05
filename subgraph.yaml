@@ -619,3 +619,31 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+
+  - name: OpenSea_Wyvern
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
+      abi: OpenSea_Market
+      startBlock: 5774644
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./subgraphs/opensea/mapping.ts
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      abis:
+        - name: OpenSea_Market
+          file: ./subgraphs/opensea/abis/OpenSea_Market.json
+        - name: ERC721
+          file: ./subgraphs/opensea/abis/ERC721.json
+        - name: ERC1155
+          file: ./subgraphs/opensea/abis/ERC1155.json
+      callHandlers:
+        - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
+          handler: handleOpenSeaSale

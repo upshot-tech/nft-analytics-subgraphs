@@ -1,0 +1,14 @@
+{
+  "name": "nft-analytics-opensea",
+  "version": "0.2.0",
+  "description": "NFT Analytics Subgraph for Opensea",
+  "license": "MIT",
+  "scripts": {
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy nft-analytics-opensea"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "latest",
+    "@graphprotocol/graph-ts": "latest"
+  }
+}
