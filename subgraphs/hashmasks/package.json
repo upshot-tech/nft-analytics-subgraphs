@@ -1,0 +1,14 @@
+{
+  "name": "nft-analytics-hashmasks",
+  "version": "0.2.0",
+  "description": "NFT Analytics Subgraph for Hashmasks",
+  "license": "MIT",
+  "scripts": {
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-hashmasks"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "latest",
+    "@graphprotocol/graph-ts": "latest"
+  }
+}

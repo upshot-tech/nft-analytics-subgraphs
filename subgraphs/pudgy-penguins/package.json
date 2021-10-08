@@ -1,0 +1,14 @@
+{
+  "name": "nft-analytics-pudgypenguins",
+  "version": "0.2.0",
+  "description": "NFT Analytics Subgraph for PudgyPenguins",
+  "license": "MIT",
+  "scripts": {
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-pudgypenguins"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "latest",
+    "@graphprotocol/graph-ts": "latest"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "nft-analytics-subgraph-bayc",
+  "version": "0.2.0",
+  "description": "NFT Analytics Subgraph for the Loot project",
+  "license": "MIT",
+  "scripts": {
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio nft-analytics-loot"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "latest",
+    "@graphprotocol/graph-ts": "latest"
+  }
+}

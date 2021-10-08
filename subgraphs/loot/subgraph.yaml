@@ -1,0 +1,55 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraph for Bored Ape Yacht Club
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: Loot_OpenSea_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
+      abi: OpenSea_Market
+      startBlock: 13108877
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mapping.ts
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      abis:
+        - name: OpenSea_Market
+          file: ./abis/OpenSea_Market.json
+        - name: Loot_ERC721
+          file: ./abis/Loot_ERC721.json
+      callHandlers:
+        - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
+          handler: handleOpenSeaSale
+
+  - name: Loot_ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Loot_ERC721
+      address: "0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7"
+      startBlock: 13108877
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: Loot_ERC721
+          file: ./abis/Loot_ERC721.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - TransferEvent
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

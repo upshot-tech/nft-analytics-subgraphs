@@ -1,0 +1,57 @@
+specVersion: 0.0.2
+description: NFT Analytics Subgraph for Bored Ape Yacht Club
+repository: https://github.com/upshot-tech/nft-analytics-subgraphs
+schema:
+  file: ./schema.graphql
+dataSources:
+
+
+  - name: HashMasks_OpenSea_Market
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b"
+      abi: OpenSea_Market
+      startBlock: 11743743 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mapping.ts
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - SaleEvent
+      abis:
+        - name: OpenSea_Market
+          file: ./abis/OpenSea_Market.json
+        - name: HashMasks_ERC721
+          file: ./abis/HashMasks_ERC721.json
+      callHandlers:
+        - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
+          handler: handleOpenSeaSale
+
+  - name: HashMasks_ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: HashMasks_ERC721
+      address: "0xC2C747E0F7004F9E8817Db2ca4997657a7746928"
+      startBlock: 11743743
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      file: ./mapping.ts
+      language: wasm/assemblyscript
+      abis:
+        - name: HashMasks_ERC721
+          file: ./abis/HashMasks_ERC721.json
+      entities:
+        - Account
+        - Contract
+        - NFT
+        - TransferEvent
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

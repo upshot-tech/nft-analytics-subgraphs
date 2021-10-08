@@ -1,0 +1,121 @@
+type Account @entity {
+  id: ID!
+  totalBought: BigInt!
+  totalBoughtWei: BigInt!
+  totalSold: BigInt!
+  totalSoldWei: BigInt!
+  totalCreations: BigInt!
+  totalCreationsSold: BigInt!
+  totalCreationsSoldWei: BigInt!
+  avgBoughtWei: BigInt!
+  avgSoldWei: BigInt!
+  avgCreationsSoldWei: BigInt!
+  totalSent: BigInt!
+  totalReceived: BigInt!
+  totalCreationTransfers: BigInt!
+  created: [NFT!]! @derivedFrom(field: "creator")
+  bought: [SaleEvent!]! @derivedFrom(field: "buyer")
+  sold: [SaleEvent!]! @derivedFrom(field: "seller")
+  sent: [TransferEvent!]! @derivedFrom(field: "from")
+  received: [TransferEvent!]! @derivedFrom(field: "to")
+}
+
+enum Standard {
+  ERC721,
+  ERC1155,
+}
+
+type Contract @entity {
+  id: ID!
+  uri: String!
+  name: String!
+  symbol: String!
+  metadata: String!
+  totalMinted: BigInt!
+  totalSales: BigInt!
+  totalSalesWei: BigInt!
+  avgSaleWei: BigInt!
+  totalTransfers: BigInt!
+  nfts: [NFT!]! @derivedFrom(field: "contract")
+  sales: [SaleEvent!]! @derivedFrom(field: "contract")
+  transfers: [TransferEvent!]! @derivedFrom(field: "contract")
+  creators: [Account!]!
+  buyers: [Account!]!
+  sellers: [Account!]!
+  standard: Standard
+}
+
+type NFT @entity {
+  id: ID!
+  uri: String!
+  contract: Contract!
+  tokenId: BigInt!
+  creator: Account!
+  metadata: String
+  totalSales: BigInt!
+  totalSalesWei: BigInt!
+  avgSaleWei: BigInt!
+  totalTransfers: BigInt!
+  sales: [SaleEvent!]! @derivedFrom(field: "nft")
+  transfers: [TransferEvent!]! @derivedFrom(field: "nft")
+  block: BigInt!
+  hash: Bytes!
+  timestamp: BigInt!
+}
+
+type SaleEvent @entity {
+  id: ID!
+  idx: BigInt!
+  contract: Contract!
+  nft: NFT!
+  amount: BigInt!
+  metadata: String
+  seller: Account!
+  buyer: Account!
+  block: BigInt!
+  hash: Bytes!
+  timestamp: BigInt!
+  paymentToken: Account
+}
+
+type TransferEvent @entity {
+  id: ID!
+  idx: BigInt!
+  contract: Contract!
+  nft: NFT!
+  from: Account!
+  to: Account!
+  block: BigInt!
+  hash: Bytes!
+  timestamp: BigInt!
+}
+
+enum OrderType {
+  Bid,
+  Ask,
+}
+
+enum OrderState {
+  Cancelled,
+  Finalized,  
+}
+
+type Order @entity {
+  id: ID!
+  contract: Contract!
+  nft: NFT!
+  maker: Account!
+  taker: Account!
+  type: OrderType!
+  state: OrderState!
+  paymentToken: Bytes!
+  basePrice: BigInt!
+  staticTarget: Bytes
+  staticExtraData: Bytes
+  extra: BigInt
+  expiration: BigInt
+  block: BigInt!
+  hash: Bytes!
+  timestamp: BigInt!
+}
+

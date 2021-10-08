@@ -1,6 +1,6 @@
 import { Account, Contract, NFT, SaleEvent } from "../../types/schema";
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
-import { ONE } from "../../constants";
+import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts";
+import { ONE, ZERO_ADDRESS } from "../../constants";
 
 export function create(
   nft: NFT,
@@ -12,7 +12,8 @@ export function create(
   block: BigInt,
   hash: Bytes,
   timestamp: BigInt,
-  metadata: string = "{}"
+  metadata: string = "{}",
+  paymentToken: string = "",
 ): void {
   /* Record the new sales event */
   let saleId = contract.id
@@ -27,6 +28,7 @@ export function create(
   sale.contract = contract.id;
   sale.nft = nft.id;
   sale.amount = amount;
+  sale.paymentToken = paymentToken;
   sale.buyer = buyer.id;
   sale.seller = seller.id;
   sale.block = block;
